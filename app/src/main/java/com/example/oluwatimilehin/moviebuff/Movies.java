@@ -26,7 +26,8 @@ public class Movies {
     }
 
     public String getYear() {
-        return mYear;
+        String yearString = mYear.substring(0, 4);
+        return yearString;
     }
 
 }
