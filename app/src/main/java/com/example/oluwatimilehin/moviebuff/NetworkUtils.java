@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * oluwatimilehinadeniran@gmail.com.
  */
 
-public  class NetworkUtils extends AppCompatActivity {
+public class NetworkUtils extends AppCompatActivity {
 
 
     public static ArrayList<Movies> parseJson(String key, String apiKey) {
@@ -33,21 +33,23 @@ public  class NetworkUtils extends AppCompatActivity {
         try {
             JSONObject jsonObject = new JSONObject(jsonResult);
             JSONArray jsonArray = jsonObject.getJSONArray("results");
-            for(int i = 0; i < jsonArray.length(); i ++){
-                JSONObject results = jsonArray.getJSONObject(i);
-                String title = results.getString("original_title");
-                String release_date = results.getString("release_date");
-                String path = results.getString("poster_path");
-                String synopsis = results.getString("overview");
-                String rating = results.getString("vote_average");
-                movies.add(new Movies(title, release_date, path, synopsis, rating));
 
+            if (jsonArray != null) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject results = jsonArray.getJSONObject(i);
+                    String title = results.getString("original_title");
+                    String release_date = results.getString("release_date");
+                    String path = results.getString("poster_path");
+                    String synopsis = results.getString("overview");
+                    String rating = results.getString("vote_average");
+                    movies.add(new Movies(title, release_date, path, synopsis, rating));
+                }
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return  movies;
+        return movies;
 
     }
 
@@ -58,20 +60,20 @@ public  class NetworkUtils extends AppCompatActivity {
      * @param keyword
      * @return
      */
-    private static URL buildUrl(String keyword, String apiKey ) {
+    private static URL buildUrl(String keyword, String apiKey) {
         URL url = null;
 
         final String MOVIE_SCHEME = "https";
         final String MOVIE_AUTHORITY = "api.themoviedb.org";
 
         Uri.Builder builder = new Uri.Builder();
-            builder.scheme(MOVIE_SCHEME)
-                    .authority(MOVIE_AUTHORITY)
-                    .appendPath("3")
-                    .appendPath("movie")
-                    .appendPath(keyword)
-                    .appendQueryParameter("api_key", apiKey)
-                    .build();
+        builder.scheme(MOVIE_SCHEME)
+                .authority(MOVIE_AUTHORITY)
+                .appendPath("3")
+                .appendPath("movie")
+                .appendPath(keyword)
+                .appendQueryParameter("api_key", apiKey)
+                .build();
 
         try {
             url = new URL(builder.toString());
