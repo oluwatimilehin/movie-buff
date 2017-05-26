@@ -30,7 +30,7 @@ public class MovieActivity extends AppCompatActivity{
 
             ArrayList<Movies> s = NetworkUtils.parseJson(strings[0], apiKey);
 
-            return s.get(1).getTitle();
+            return s.get(2).getTitle();
 
         }
 

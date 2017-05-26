@@ -27,11 +27,12 @@ public  class NetworkUtils extends AppCompatActivity {
     public static ArrayList<Movies> parseJson(String key, String apiKey) {
         URL url = buildUrl(key, apiKey);
         String jsonResult = extractResult(url);
+
         ArrayList<Movies> movies = new ArrayList<Movies>();
 
         try {
             JSONObject jsonObject = new JSONObject(jsonResult);
-            JSONArray  jsonArray = jsonObject.getJSONArray("results");
+            JSONArray jsonArray = jsonObject.getJSONArray("results");
             for(int i = 0; i < jsonArray.length(); i ++){
                 JSONObject results = jsonArray.getJSONObject(i);
                 String title = results.getString("title");
