@@ -2,7 +2,6 @@ package com.example.oluwatimilehin.moviebuff;
 
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
@@ -27,25 +26,10 @@ public class MovieActivity extends AppCompatActivity {
     }
 
     public class MovieDataLoader implements LoaderManager.LoaderCallbacks<ArrayList<Movies>> {
-
-
         @Override
         public Loader<ArrayList<Movies>> onCreateLoader(int id, final Bundle args) {
-
-            return new AsyncTaskLoader<ArrayList<Movies>>(getApplicationContext()) {
-
-                @Override
-                protected void onStartLoading() {
-                    forceLoad();
-                }
-
-                @Override
-                public ArrayList<Movies> loadInBackground() {
-                    String apiKey = getString(R.string.api_key);
-                    ArrayList<Movies> s = NetworkUtils.parseJson(args.getString("query"), apiKey);
-                    return s;
-                }
-            };
+            String apiKey = getString(R.string.api_key);
+            return new MovieLoader(MovieActivity.this, apiKey, args);
 
         }
 
