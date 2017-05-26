@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class MovieActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Bundle bundle = new Bundle();
     final static int MOVIE_LOADER_ID = 3;
+    ArrayList<Movies> movies = new ArrayList<Movies>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +59,11 @@ public class MovieActivity extends AppCompatActivity {
 
         @Override
         public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> data) {
-
-
+            movies = data;
+            RecyclerView rv = (RecyclerView) findViewById(R.id.rv_movies);
+            MovieRVAdapter adapter = new MovieRVAdapter(movies);
+            rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
+            rv.setAdapter(adapter);
         }
 
         @Override
