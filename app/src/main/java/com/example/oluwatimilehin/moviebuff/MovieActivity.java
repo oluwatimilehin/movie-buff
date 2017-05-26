@@ -35,7 +35,7 @@ public class MovieActivity extends AppCompatActivity {
 
         @Override
         public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> data) {
-            String s = data.get(2).getTitle();
+            String s = data.get(9).getPlot();
             mTv.setText(s);
 
         }

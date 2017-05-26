@@ -35,10 +35,13 @@ public  class NetworkUtils extends AppCompatActivity {
             JSONArray jsonArray = jsonObject.getJSONArray("results");
             for(int i = 0; i < jsonArray.length(); i ++){
                 JSONObject results = jsonArray.getJSONObject(i);
-                String title = results.getString("title");
-                String year = results.getString("release_date");
+                String title = results.getString("original_title");
+                String release_date = results.getString("release_date");
                 String path = results.getString("poster_path");
-                movies.add(new Movies(title, year, path));
+                String synopsis = results.getString("overview");
+                String rating = results.getString("vote_average");
+                movies.add(new Movies(title, release_date, path, synopsis, rating));
+
             }
 
         } catch (JSONException e) {
