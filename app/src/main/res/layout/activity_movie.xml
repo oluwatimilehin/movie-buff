@@ -7,17 +7,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
-    tools:context="com.example.oluwatimilehin.moviebuff.MovieActivity"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    tools:context="com.example.oluwatimilehin.moviebuff.MovieActivity">
     
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:id="@+id/toolbar"
-        android:background="@color/colorPrimary"
-        app:titleTextColor="@color/textColor"/>
-
+ <include layout="@layout/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
 
 </LinearLayout>
