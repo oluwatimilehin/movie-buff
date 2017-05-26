@@ -22,6 +22,7 @@ public class MovieActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         String s = "top_rated";
         bundle.putString("query", s);

@@ -9,4 +9,17 @@
     android:minHeight="?attr/actionBarSize"
     app:titleTextColor="@color/textColor"
     android:textAlignment="center"
-    android:background="@color/colorPrimary"/>
+    android:background="@color/colorPrimary"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar_text"
+        android:text="@string/app_name"
+        android:textColor="@color/textColor"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:gravity="center"
+        />
+
+    </android.support.v7.widget.Toolbar>
