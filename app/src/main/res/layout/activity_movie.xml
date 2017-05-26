@@ -10,9 +10,34 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.example.oluwatimilehin.moviebuff.MovieActivity">
-    
- <include layout="@layout/toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"/>
+
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+
+            <include
+                layout="@layout/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_movies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>
