@@ -4,13 +4,14 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
 
 public class MovieActivity extends AppCompatActivity {
 
-    private TextView mTv;
+
+    private Toolbar toolbar;
     private Bundle bundle = new Bundle();
     final static int MOVIE_LOADER_ID = 3;
 
@@ -18,9 +19,13 @@ public class MovieActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
-        mTv = (TextView) findViewById(R.id.tv);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         String s = "top_rated";
         bundle.putString("query", s);
+
         getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, bundle,new MovieDataLoader());
 
     }
@@ -35,8 +40,7 @@ public class MovieActivity extends AppCompatActivity {
 
         @Override
         public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> data) {
-            String s = data.get(9).getPlot();
-            mTv.setText(s);
+
 
         }
 
