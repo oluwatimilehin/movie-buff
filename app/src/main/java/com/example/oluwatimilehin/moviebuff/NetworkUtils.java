@@ -1,7 +1,7 @@
 package com.example.oluwatimilehin.moviebuff;
 
-import android.content.Context;
 import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,11 +21,11 @@ import java.util.ArrayList;
  * oluwatimilehinadeniran@gmail.com.
  */
 
-public class NetworkUtils {
+public  class NetworkUtils extends AppCompatActivity {
 
 
-    public static ArrayList<Movies> parseJson(String key) {
-        URL url = buildUrl(key);
+    public static ArrayList<Movies> parseJson(String key, String apiKey) {
+        URL url = buildUrl(key, apiKey);
         String jsonResult = extractResult(url);
         ArrayList<Movies> movies = new ArrayList<Movies>();
 
@@ -54,21 +54,20 @@ public class NetworkUtils {
      * @param keyword
      * @return
      */
-    private static URL buildUrl(String keyword) {
-        Context context = null;
+    private static URL buildUrl(String keyword, String apiKey ) {
         URL url = null;
 
         final String MOVIE_SCHEME = "https";
         final String MOVIE_AUTHORITY = "api.themoviedb.org";
 
         Uri.Builder builder = new Uri.Builder();
-        builder.scheme(MOVIE_SCHEME)
-                .authority(MOVIE_AUTHORITY)
-                .appendPath("3")
-                .appendPath("movie")
-                .appendPath(keyword)
-                .appendQueryParameter("api_key", context.getString(R.string.api_key))
-                .build();
+            builder.scheme(MOVIE_SCHEME)
+                    .authority(MOVIE_AUTHORITY)
+                    .appendPath("3")
+                    .appendPath("movie")
+                    .appendPath(keyword)
+                    .appendQueryParameter("api_key", apiKey)
+                    .build();
 
         try {
             url = new URL(builder.toString());
@@ -104,9 +103,9 @@ public class NetworkUtils {
             }
 
             reader = new BufferedReader(new InputStreamReader(inputStream));
-            String line = reader.readLine();
+            String line;
 
-            while (line != null) {
+            while ((line = reader.readLine()) != null) {
                 buffer.append(line + "\n");
             }
 
