@@ -1,15 +1,19 @@
 package com.example.oluwatimilehin.moviebuff;
 
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MovieActivity extends AppCompatActivity{
+public class MovieActivity extends AppCompatActivity {
 
     private TextView mTv;
+    private Bundle bundle = new Bundle();
+    final static int MOVIE_LOADER_ID = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,28 +21,47 @@ public class MovieActivity extends AppCompatActivity{
         setContentView(R.layout.activity_movie);
         mTv = (TextView) findViewById(R.id.tv);
         String s = "top_rated";
-         new FetchMovieData().execute(s);
+        bundle.putString("query", s);
+        getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, bundle,new MovieDataLoader());
+
     }
 
-
-    private class FetchMovieData extends AsyncTask<String, Void, String>{
+    public class MovieDataLoader implements LoaderManager.LoaderCallbacks<ArrayList<Movies>> {
 
 
         @Override
-        protected String doInBackground(String... strings) {
-            String apiKey = getString(R.string.api_key);
+        public Loader<ArrayList<Movies>> onCreateLoader(int id, final Bundle args) {
 
-            ArrayList<Movies> s = NetworkUtils.parseJson(strings[0], apiKey);
+            return new AsyncTaskLoader<ArrayList<Movies>>(getApplicationContext()) {
 
-            return s.get(2).getTitle();
+                @Override
+                protected void onStartLoading() {
+                    forceLoad();
+                }
+
+                @Override
+                public ArrayList<Movies> loadInBackground() {
+                    String apiKey = getString(R.string.api_key);
+                    ArrayList<Movies> s = NetworkUtils.parseJson(args.getString("query"), apiKey);
+                    return s;
+                }
+            };
 
         }
 
         @Override
-        protected void onPostExecute(String s) {
-
+        public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> data) {
+            String s = data.get(2).getTitle();
             mTv.setText(s);
+
+        }
+
+        @Override
+        public void onLoaderReset(Loader<ArrayList<Movies>> loader) {
+
         }
     }
 }
+
+
 
