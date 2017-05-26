@@ -1,5 +1,6 @@
 package com.example.oluwatimilehin.moviebuff;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -7,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MovieActivity extends AppCompatActivity {
 
@@ -20,6 +24,12 @@ public class MovieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
 
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/Raleway-Light.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -29,6 +39,11 @@ public class MovieActivity extends AppCompatActivity {
 
         getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, bundle,new MovieDataLoader());
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     public class MovieDataLoader implements LoaderManager.LoaderCallbacks<ArrayList<Movies>> {

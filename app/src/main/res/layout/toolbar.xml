@@ -3,6 +3,8 @@
 <android.support.v7.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingPrefix"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -20,7 +22,6 @@
         android:textColor="@color/textColor"
         android:textAppearance="?android:textAppearanceMedium"
         android:gravity="center"
-        android:typeface="monospace"
-        />
+        fontPath = "fonts/Raleway-Medium.ttf"/>
 
     </android.support.v7.widget.Toolbar>
