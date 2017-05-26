@@ -20,6 +20,7 @@
         android:textColor="@color/textColor"
         android:textAppearance="?android:textAppearanceMedium"
         android:gravity="center"
+        android:typeface="monospace"
         />
 
     </android.support.v7.widget.Toolbar>
