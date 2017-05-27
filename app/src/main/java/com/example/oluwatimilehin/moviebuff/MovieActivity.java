@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,9 +34,9 @@ public class MovieActivity extends AppCompatActivity {
     ArrayList<Movies> movies = null;
     private Toolbar toolbar;
     private TextView toolbarText;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private Bundle bundle = new Bundle();
     private TextView mErrorTv;
+    String query;
 
 
     @Override
@@ -61,24 +60,21 @@ public class MovieActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        String s = "popular";
-        bundle.putString("query", s);
+        query = "popular";
+        bundle.putString("query", query);
         getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, bundle, new MovieDataLoader());
 
     }
 
-    private void  refreshLoader(){
-        if (info != null) {
-            getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, bundle, new MovieDataLoader());
-            mSwipeRefreshLayout.setVisibility(View.GONE);
-        }
-    }
 
     private void restartLoader(String s) {
         bundle.putString("query", s);
 
         if (info != null) {
-            getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, bundle, new MovieDataLoader());
+            if (info.isConnectedOrConnecting()) {
+                getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, bundle, new
+                        MovieDataLoader());
+            }
         }
     }
 
@@ -87,11 +83,16 @@ public class MovieActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
 
-        //Change the color of the icon
+        //Change the color of the icons
         Drawable drawable = menu.getItem(0).getIcon();
-        if (drawable != null) {
+        Drawable overflowIcon = toolbar.getOverflowIcon();
+        if (drawable != null && overflowIcon != null) {
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(R.color.textColor, null), PorterDuff.Mode.SRC_ATOP);
+
+            overflowIcon.mutate();
+            overflowIcon.setColorFilter(getResources().getColor(R.color.textColor, null), PorterDuff.Mode
+                    .SRC_ATOP);
         }
 
         return true;
@@ -100,25 +101,35 @@ public class MovieActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        String s;
+
         switch (id) {
             case R.id.top_rated:
                 if (toolbarText.getText() == getString(R.string.top_rated)) {
                     return true;
                 }
                 item.setChecked(true);
-                s = "top_rated";
+                query = "top_rated";
                 toolbarText.setText(getString(R.string.top_rated));
-                restartLoader(s);
+                restartLoader(query);
                 break;
             case R.id.popular:
                 if (toolbarText.getText() == getString(R.string.popular)) {
                     return true;
                 }
                 item.setChecked(true);
-                s = "popular";
+                query = "popular";
                 toolbarText.setText(getString(R.string.popular));
-                restartLoader(s);
+                restartLoader(query);
+                break;
+            case R.id.action_refresh:
+                if(toolbarText.getText() == getString(R.string.popular)){
+                    query = "popular";
+                }
+                else{
+                    query = "top_rated";
+                }
+                movies = null;
+                restartLoader(query);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -155,7 +166,6 @@ public class MovieActivity extends AppCompatActivity {
             rv.setVisibility(View.INVISIBLE);
             mErrorTv.setText(getString(R.string.internet_error));
             return null;
-
         }
 
 

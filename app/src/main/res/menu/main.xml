@@ -21,8 +21,10 @@
                     android:title="@string/top_rated_option"/>
             </group>
         </menu>
-
-
     </item>
+
+    <item android:id="@+id/action_refresh"
+          app:showAsAction="never"
+          android:title="Refresh"/>
 
 </menu>
