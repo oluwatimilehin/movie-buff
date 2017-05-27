@@ -28,7 +28,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MovieActivity extends AppCompatActivity {
 
-
+    NetworkInfo info;
     final static int MOVIE_LOADER_ID = 3;
     ProgressBar mProgressBar;
     ArrayList<Movies> movies = new ArrayList<Movies>();
@@ -71,7 +71,10 @@ public class MovieActivity extends AppCompatActivity {
 
     private void restartLoader(String s) {
         bundle.putString("query", s);
-        getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, bundle, new MovieDataLoader());
+
+        if(info != null) {
+            getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, bundle, new MovieDataLoader());
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -131,7 +134,7 @@ public class MovieActivity extends AppCompatActivity {
             ConnectivityManager cm = (ConnectivityManager) getApplicationContext()
                     .getSystemService(CONNECTIVITY_SERVICE);
 
-            NetworkInfo info = cm.getActiveNetworkInfo();
+            info = cm.getActiveNetworkInfo();
 
             if (info != null) {
                 if (info.isConnectedOrConnecting()) {
@@ -160,7 +163,6 @@ public class MovieActivity extends AppCompatActivity {
 
         @Override
         public void onLoaderReset(Loader<ArrayList<Movies>> loader) {
-            movies.clear();
             loader.forceLoad();
         }
 
