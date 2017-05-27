@@ -10,8 +10,7 @@
         <item android:title="@string/sort_by"/>
         <item android:title="@string/top_rated_option"
               android:id="@+id/top_rated"
-              android:checkable="true"
-              android:checked="true"/>
+              android:checkable="true"/>
         <item android:title="@string/popular_option"
               android:id="@+id/popular"
               android:checkable="true"/>

@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar_text"
-        android:text="@string/top_rated"
+        android:text="@string/popular"
         android:textColor="@color/textColor"
         android:textAppearance="?android:textAppearanceLarge"
         android:gravity="center"
