@@ -30,6 +30,13 @@
             android:textColor="@color/textColor"
             android:textAppearance="?android:textAppearanceMedium"/>
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pb_indicator"
+            android:layout_gravity="center"
+            android:visibility="invisible"/>
+
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBar"
             android:layout_width="match_parent"

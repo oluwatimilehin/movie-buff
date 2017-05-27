@@ -11,6 +11,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class MovieActivity extends AppCompatActivity {
     private Bundle bundle = new Bundle();
     final static int MOVIE_LOADER_ID = 3;
     private TextView mErrorTv;
+    ProgressBar mProgressBar;
     ArrayList<Movies> movies = new ArrayList<Movies>();
 
     @Override
@@ -38,6 +40,7 @@ public class MovieActivity extends AppCompatActivity {
                 .build()
         );
 
+        mProgressBar = (ProgressBar) findViewById(R.id.pb_indicator);
         mErrorTv = (TextView) findViewById(R.id.error_tv);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,6 +72,7 @@ public class MovieActivity extends AppCompatActivity {
             if(info != null) {
                 if(info.isConnectedOrConnecting()) {
                     mErrorTv.setVisibility(View.INVISIBLE);
+                    mProgressBar.setVisibility(View.VISIBLE);
                     return new MovieLoader(MovieActivity.this, apiKey, args);
                 }
             }
@@ -80,6 +84,7 @@ public class MovieActivity extends AppCompatActivity {
         @Override
         public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> data) {
             movies = data;
+            mProgressBar.setVisibility(View.GONE);
             RecyclerView rv = (RecyclerView) findViewById(R.id.rv_movies);
             MovieRVAdapter adapter = new MovieRVAdapter(movies);
             rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
