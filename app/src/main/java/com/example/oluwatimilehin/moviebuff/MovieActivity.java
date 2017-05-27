@@ -31,7 +31,7 @@ public class MovieActivity extends AppCompatActivity {
     NetworkInfo info;
     final static int MOVIE_LOADER_ID = 3;
     ProgressBar mProgressBar;
-    ArrayList<Movies> movies = new ArrayList<Movies>();
+    ArrayList<Movies> movies = null;
     private Toolbar toolbar;
     private TextView toolbarText;
     private MenuItem topRatedItem;
@@ -126,7 +126,7 @@ public class MovieActivity extends AppCompatActivity {
 
     public class MovieDataLoader implements LoaderManager.LoaderCallbacks<ArrayList<Movies>> {
 
-        MovieRVAdapter adapter;
+        MovieRVAdapter adapter = null;
         RecyclerView rv = (RecyclerView) findViewById(R.id.rv_movies);
 
         @Override
@@ -156,9 +156,20 @@ public class MovieActivity extends AppCompatActivity {
 
         @Override
         public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> data) {
-            movies = data;
-            mProgressBar.setVisibility(View.GONE);
+
+            if(movies != null){
+                movies.clear();
+                movies.addAll(data);
+                if(adapter != null) {
+                    adapter.notifyDataSetChanged();
+                }
+            }
+            else {
+                movies = data;
+            }
             adapter = new MovieRVAdapter(movies);
+            mProgressBar.setVisibility(View.GONE);
+
             rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
             rv.setAdapter(adapter);
         }
