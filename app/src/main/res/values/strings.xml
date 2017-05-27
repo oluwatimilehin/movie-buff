@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Movie Buff</string>
     <string name="internet_error">No Internet Access. Please try again.</string>
-    <string name="appbar_title">Top Rated Movies</string>
+    <string name="top_rated">Top Rated Movies</string>
+    <string name="top_rated_option">Top Rated</string>
+    <string name="popular_option">Popular</string>
+    <string name="popular">Popular Movies</string>
     <string name="icon_title">Options</string>
+    <string name="sort_by">Sort by</string>
 </resources>

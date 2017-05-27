@@ -28,6 +28,7 @@ public class MovieActivity extends AppCompatActivity {
 
 
     private Toolbar toolbar;
+    private TextView toolbarText;
     private Bundle bundle = new Bundle();
     final static int MOVIE_LOADER_ID = 3;
     private TextView mErrorTv;
@@ -49,6 +50,7 @@ public class MovieActivity extends AppCompatActivity {
         mErrorTv = (TextView) findViewById(R.id.error_tv);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbarText = (TextView) findViewById(R.id.toolbar_text);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 

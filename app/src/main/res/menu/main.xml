@@ -4,6 +4,20 @@
     <item android:id="@+id/down_arrow"
           android:icon="@drawable/ic_keyboard_arrow_down_white_24dp"
           app:showAsAction="always"
-          android:title="@string/icon_title"/>
+          android:title="@string/icon_title">
+
+    <menu>
+        <item android:title="@string/sort_by"/>
+        <item android:title="@string/top_rated_option"
+              android:id="@+id/top_rated"
+              android:checkable="true"
+              android:checked="true"/>
+        <item android:title="@string/popular_option"
+              android:id="@+id/popular"
+              android:checkable="true"/>
+    </menu>
+
+
+    </item>
 
 </menu>
