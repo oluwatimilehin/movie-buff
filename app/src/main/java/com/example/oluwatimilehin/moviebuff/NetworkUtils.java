@@ -46,8 +46,10 @@ public class NetworkUtils extends AppCompatActivity {
                 }
             }
 
-        } catch (JSONException e) {
+        } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
+            return null;
+
         }
         return movies;
 

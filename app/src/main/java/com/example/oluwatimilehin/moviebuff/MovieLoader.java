@@ -1,8 +1,8 @@
 package com.example.oluwatimilehin.moviebuff;
 
-import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.content.AsyncTaskLoader;
 
 import java.util.ArrayList;
 
@@ -28,8 +28,8 @@ public class MovieLoader extends AsyncTaskLoader<ArrayList<Movies>>{
 
     @Override
     public ArrayList<Movies> loadInBackground() {
-        String apiKey = mApiKey;
-        ArrayList<Movies> movies = NetworkUtils.parseJson(mBundle.getString("query"), apiKey);
+
+        ArrayList<Movies> movies = NetworkUtils.parseJson(mBundle.getString("query"), mApiKey);
         return movies;
     }
 }

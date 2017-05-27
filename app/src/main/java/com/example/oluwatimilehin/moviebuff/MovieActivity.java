@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,16 +29,16 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MovieActivity extends AppCompatActivity {
 
-    NetworkInfo info;
     final static int MOVIE_LOADER_ID = 3;
+    NetworkInfo info;
     ProgressBar mProgressBar;
     ArrayList<Movies> movies = null;
     private Toolbar toolbar;
     private TextView toolbarText;
-    private MenuItem topRatedItem;
-    private MenuItem popularItem;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private Bundle bundle = new Bundle();
     private TextView mErrorTv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +52,6 @@ public class MovieActivity extends AppCompatActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
-
-        topRatedItem = (MenuItem) findViewById(R.id.top_rated);
-        popularItem = (MenuItem) findViewById(R.id.popular);
 
         mProgressBar = (ProgressBar) findViewById(R.id.pb_indicator);
         mErrorTv = (TextView) findViewById(R.id.error_tv);
@@ -69,10 +67,17 @@ public class MovieActivity extends AppCompatActivity {
 
     }
 
+    private void  refreshLoader(){
+        if (info != null) {
+            getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, bundle, new MovieDataLoader());
+            mSwipeRefreshLayout.setVisibility(View.GONE);
+        }
+    }
+
     private void restartLoader(String s) {
         bundle.putString("query", s);
 
-        if(info != null) {
+        if (info != null) {
             getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, bundle, new MovieDataLoader());
         }
     }
@@ -95,7 +100,7 @@ public class MovieActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        String s ;
+        String s;
         switch (id) {
             case R.id.top_rated:
                 if (toolbarText.getText() == getString(R.string.top_rated)) {
@@ -127,7 +132,7 @@ public class MovieActivity extends AppCompatActivity {
     public class MovieDataLoader implements LoaderManager.LoaderCallbacks<ArrayList<Movies>> {
 
         MovieRVAdapter adapter = null;
-        RecyclerView rv = (RecyclerView) findViewById(R.id.rv_movies);
+        public RecyclerView rv = (RecyclerView) findViewById(R.id.rv_movies);
 
         @Override
         public Loader<ArrayList<Movies>> onCreateLoader(int id, final Bundle args) {
@@ -138,40 +143,46 @@ public class MovieActivity extends AppCompatActivity {
 
             info = cm.getActiveNetworkInfo();
 
-            if (info != null) {
-                if (info.isConnectedOrConnecting()) {
-                    mErrorTv.setVisibility(View.INVISIBLE);
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    rv.setVisibility(View.VISIBLE);
-                }
+            if (info != null && info.isConnectedOrConnecting()) {
+                mErrorTv.setVisibility(View.INVISIBLE);
+                mProgressBar.setVisibility(View.VISIBLE);
+                rv.setVisibility(View.VISIBLE);
+
                 return new MovieLoader(MovieActivity.this, apiKey, args);
             }
-            else {
-                mErrorTv.setVisibility(View.VISIBLE);
-                rv.setVisibility(View.INVISIBLE);
-                mErrorTv.setText(getString(R.string.internet_error));
-                return null;
-            }
+            mErrorTv.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.INVISIBLE);
+            rv.setVisibility(View.INVISIBLE);
+            mErrorTv.setText(getString(R.string.internet_error));
+            return null;
+
         }
+
 
         @Override
         public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> data) {
-
-            if(movies != null){
-                movies.clear();
-                movies.addAll(data);
-                if(adapter != null) {
-                    adapter.notifyDataSetChanged();
-                }
-            }
-            else {
-                movies = data;
-            }
-            adapter = new MovieRVAdapter(movies);
             mProgressBar.setVisibility(View.GONE);
+            if (data != null) {
+                if (movies != null) {
+                    movies.clear();
+                    movies.addAll(data);
+                    if(adapter != null) {
+                        adapter.notifyDataSetChanged();
+                    }
+                } else {
+                    movies = data;
+                }
+                adapter = new MovieRVAdapter(movies);
 
-            rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
-            rv.setAdapter(adapter);
+                rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
+                rv.setAdapter(adapter);
+            } else {
+                mErrorTv.setVisibility(View.VISIBLE);
+                rv.setVisibility(View.INVISIBLE);
+                mErrorTv.setText(getString(R.string.internet_error));
+            }
+
+
         }
 
         @Override
