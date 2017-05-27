@@ -34,7 +34,7 @@ public class MovieRVAdapter extends RecyclerView.Adapter<MovieRVAdapter.MovieVie
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         String imagePath = mMovies.get(position).getImageUrl();
-        String url = "http://image.tmdb.org/t/p/w185/" + imagePath;
+        String url = "http://image.tmdb.org/t/p/w500/" + imagePath;
 
         Picasso.with(holder.imageView.getContext()).load(url).into(holder.imageView);
         holder.titleTextView.setText(mMovies.get(position).getTitle());
