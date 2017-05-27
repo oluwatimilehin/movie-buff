@@ -1,15 +1,20 @@
 package com.example.oluwatimilehin.moviebuff;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -52,6 +57,21 @@ public class MovieActivity extends AppCompatActivity {
 
         getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, bundle,new MovieDataLoader());
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+
+       //Change the color of the icon
+        Drawable drawable = menu.getItem(0).getIcon();
+        if(drawable != null){
+            drawable.mutate();
+            drawable.setColorFilter(getResources().getColor(R.color.textColor, null), PorterDuff.Mode.SRC_ATOP );
+        }
+
+        return true;
     }
 
     @Override
