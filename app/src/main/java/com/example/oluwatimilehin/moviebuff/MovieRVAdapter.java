@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 /**
@@ -34,6 +36,7 @@ public class MovieRVAdapter extends RecyclerView.Adapter<MovieRVAdapter.MovieVie
         String imagePath = mMovies.get(position).getImageUrl();
         String url = "http://image.tmdb.org/t/p/w185/" + imagePath;
 
+        Picasso.with(holder.imageView.getContext()).load(url).into(holder.imageView);
         holder.titleTextView.setText(mMovies.get(position).getTitle());
         holder.dateTextView.setText(mMovies.get(position).getYear());
     }
