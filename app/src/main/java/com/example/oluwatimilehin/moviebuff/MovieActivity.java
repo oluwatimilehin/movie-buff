@@ -95,12 +95,13 @@ public class MovieActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        String s = "query";
+        String s ;
         switch (id) {
             case R.id.top_rated:
                 if (toolbarText.getText() == getString(R.string.top_rated)) {
                     return true;
                 }
+                item.setChecked(true);
                 s = "top_rated";
                 toolbarText.setText(getString(R.string.top_rated));
                 restartLoader(s);
@@ -109,12 +110,13 @@ public class MovieActivity extends AppCompatActivity {
                 if (toolbarText.getText() == getString(R.string.popular)) {
                     return true;
                 }
+                item.setChecked(true);
                 s = "popular";
                 toolbarText.setText(getString(R.string.popular));
                 restartLoader(s);
                 break;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
