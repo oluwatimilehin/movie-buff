@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Movie Buff</string>
+    <string name="internet_error">No Internet Access. Please try again.</string>
 </resources>

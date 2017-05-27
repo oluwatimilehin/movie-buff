@@ -1,6 +1,8 @@
 package com.example.oluwatimilehin.moviebuff;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -8,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -20,6 +24,7 @@ public class MovieActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Bundle bundle = new Bundle();
     final static int MOVIE_LOADER_ID = 3;
+    private TextView mErrorTv;
     ArrayList<Movies> movies = new ArrayList<Movies>();
 
     @Override
@@ -32,6 +37,8 @@ public class MovieActivity extends AppCompatActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+
+        mErrorTv = (TextView) findViewById(R.id.error_tv);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,8 +60,21 @@ public class MovieActivity extends AppCompatActivity {
         @Override
         public Loader<ArrayList<Movies>> onCreateLoader(int id, final Bundle args) {
             String apiKey = getString(R.string.api_key);
-            return new MovieLoader(MovieActivity.this, apiKey, args);
 
+            ConnectivityManager cm = (ConnectivityManager) getApplicationContext()
+                    .getSystemService(CONNECTIVITY_SERVICE);
+
+            NetworkInfo info = cm.getActiveNetworkInfo();
+
+            if(info != null) {
+                if(info.isConnectedOrConnecting()) {
+                    mErrorTv.setVisibility(View.INVISIBLE);
+                    return new MovieLoader(MovieActivity.this, apiKey, args);
+                }
+            }
+            mErrorTv.setVisibility(View.VISIBLE);
+            mErrorTv.setText(getString(R.string.internet_error));
+            return null;
         }
 
         @Override
