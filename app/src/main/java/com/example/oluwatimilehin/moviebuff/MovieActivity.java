@@ -34,12 +34,11 @@ public class MovieActivity extends AppCompatActivity {
     NetworkInfo info;
     ProgressBar mProgressBar;
     ArrayList<Movies> movies = null;
+    String query;
     private Toolbar toolbar;
     private TextView toolbarText;
     private Bundle bundle = new Bundle();
     private TextView mErrorTv;
-    String query;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +69,11 @@ public class MovieActivity extends AppCompatActivity {
 
     /**
      * This method is to generate a new random integer so that the loader has a unique ID.
+     *
      * @param random
      * @return
      */
-    private int anyRandomInt(Random random){
+    private int anyRandomInt(Random random) {
         return random.nextInt();
     }
 
@@ -84,11 +84,11 @@ public class MovieActivity extends AppCompatActivity {
 
         bundle.putString("query", s);
 
-        if(getSupportLoaderManager().getLoader(MOVIE_LOADER_ID) != null) {
+        if (getSupportLoaderManager().getLoader(MOVIE_LOADER_ID) != null) {
             getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, bundle, new
                     MovieDataLoader());
-        }else{
-            Log.d("CONNECTED","I'm here" );
+        } else {
+            Log.d("CONNECTED", "I'm here");
             getSupportLoaderManager().initLoader(uniqueId, bundle, new MovieDataLoader());
         }
     }
@@ -139,10 +139,9 @@ public class MovieActivity extends AppCompatActivity {
                 restartLoader(query);
                 break;
             case R.id.action_refresh:
-                if(toolbarText.getText() == getString(R.string.popular)){
+                if (toolbarText.getText() == getString(R.string.popular)) {
                     query = "popular";
-                }
-                else{
+                } else {
                     query = "top_rated";
                 }
                 movies = null;
@@ -152,27 +151,45 @@ public class MovieActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    private boolean isConnected(){
+    /**
+     * This method checks for the internet connection status
+     *
+     * @return
+     */
+    private boolean isConnected() {
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext()
                 .getSystemService(CONNECTIVITY_SERVICE);
 
         info = cm.getActiveNetworkInfo();
-        if(info != null && info.isConnectedOrConnecting()){
+        if (info != null && info.isConnectedOrConnecting()) {
             return true;
         }
         return false;
     }
 
+
+    /**
+     * Method used to install the Calligraphy library
+     *
+     * @param newBase
+     */
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+
     public class MovieDataLoader implements LoaderManager.LoaderCallbacks<ArrayList<Movies>> {
 
         MovieRVAdapter adapter = null;
-        public RecyclerView rv = (RecyclerView) findViewById(R.id.rv_movies);
+        RecyclerView rv = (RecyclerView) findViewById(R.id.rv_movies);
+
+        private void showErrorScreen(){
+            mErrorTv.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.INVISIBLE);
+            rv.setVisibility(View.INVISIBLE);
+            mErrorTv.setText(getString(R.string.internet_error));
+        }
 
         @Override
         public Loader<ArrayList<Movies>> onCreateLoader(int id, final Bundle args) {
@@ -181,19 +198,13 @@ public class MovieActivity extends AppCompatActivity {
             boolean isConnected = isConnected();
 
             if (isConnected) {
-                Log.d("CONNECTED", true + " ");
                 mErrorTv.setVisibility(View.INVISIBLE);
                 mProgressBar.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.VISIBLE);
 
                 return new MovieLoader(MovieActivity.this, apiKey, args);
             }
-            Log.d("CONNECTED", false + " ");
-            mErrorTv.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.INVISIBLE);
-            rv.setVisibility(View.INVISIBLE);
-            mErrorTv.setText(getString(R.string.internet_error));
-            isConnected();
+            showErrorScreen();
             return null;
         }
 
@@ -205,7 +216,7 @@ public class MovieActivity extends AppCompatActivity {
                 if (movies != null) {
                     movies.clear();
                     movies.addAll(data);
-                    if(adapter != null) {
+                    if (adapter != null) {
                         adapter.notifyDataSetChanged();
                     }
                 } else {
@@ -216,9 +227,7 @@ public class MovieActivity extends AppCompatActivity {
                 rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
                 rv.setAdapter(adapter);
             } else {
-                mErrorTv.setVisibility(View.VISIBLE);
-                rv.setVisibility(View.INVISIBLE);
-                mErrorTv.setText(getString(R.string.internet_error));
+                showErrorScreen();
             }
 
 
@@ -228,7 +237,6 @@ public class MovieActivity extends AppCompatActivity {
         public void onLoaderReset(Loader<ArrayList<Movies>> loader) {
             //super(loader);
         }
-
 
     }
 }
