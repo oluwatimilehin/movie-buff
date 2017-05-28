@@ -7,4 +7,5 @@
     <string name="popular">Popular Movies</string>
     <string name="icon_title">Options</string>
     <string name="sort_by">Sort by</string>
+    <string name="movie_detail">Movie Details</string>
 </resources>
