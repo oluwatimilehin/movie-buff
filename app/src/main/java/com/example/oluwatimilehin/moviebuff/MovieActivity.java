@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -66,15 +68,28 @@ public class MovieActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method is to generate a new random integer so that the loader has a unique ID.
+     * @param random
+     * @return
+     */
+    private int anyRandomInt(Random random){
+        return random.nextInt();
+    }
+
 
     private void restartLoader(String s) {
+        Random random = new Random();
+        int uniqueId = anyRandomInt(random);
+
         bundle.putString("query", s);
 
-        if (info != null) {
-            if (info.isConnectedOrConnecting()) {
-                getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, bundle, new
-                        MovieDataLoader());
-            }
+        if(getSupportLoaderManager().getLoader(MOVIE_LOADER_ID) != null) {
+            getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, bundle, new
+                    MovieDataLoader());
+        }else{
+            Log.d("CONNECTED","I'm here" );
+            getSupportLoaderManager().initLoader(uniqueId, bundle, new MovieDataLoader());
         }
     }
 
@@ -83,7 +98,9 @@ public class MovieActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
 
-        //Change the color of the icons
+        /**
+         * Changes the color of the icons
+         */
         Drawable drawable = menu.getItem(0).getIcon();
         Drawable overflowIcon = toolbar.getOverflowIcon();
         if (drawable != null && overflowIcon != null) {
@@ -135,6 +152,18 @@ public class MovieActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    private boolean isConnected(){
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext()
+                .getSystemService(CONNECTIVITY_SERVICE);
+
+        info = cm.getActiveNetworkInfo();
+        if(info != null && info.isConnectedOrConnecting()){
+            return true;
+        }
+        return false;
+    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -149,22 +178,22 @@ public class MovieActivity extends AppCompatActivity {
         public Loader<ArrayList<Movies>> onCreateLoader(int id, final Bundle args) {
             String apiKey = getString(R.string.api_key);
 
-            ConnectivityManager cm = (ConnectivityManager) getApplicationContext()
-                    .getSystemService(CONNECTIVITY_SERVICE);
+            boolean isConnected = isConnected();
 
-            info = cm.getActiveNetworkInfo();
-
-            if (info != null && info.isConnectedOrConnecting()) {
+            if (isConnected) {
+                Log.d("CONNECTED", true + " ");
                 mErrorTv.setVisibility(View.INVISIBLE);
                 mProgressBar.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.VISIBLE);
 
                 return new MovieLoader(MovieActivity.this, apiKey, args);
             }
+            Log.d("CONNECTED", false + " ");
             mErrorTv.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.INVISIBLE);
             rv.setVisibility(View.INVISIBLE);
             mErrorTv.setText(getString(R.string.internet_error));
+            isConnected();
             return null;
         }
 
@@ -197,7 +226,7 @@ public class MovieActivity extends AppCompatActivity {
 
         @Override
         public void onLoaderReset(Loader<ArrayList<Movies>> loader) {
-            loader.forceLoad();
+            //super(loader);
         }
 
 
