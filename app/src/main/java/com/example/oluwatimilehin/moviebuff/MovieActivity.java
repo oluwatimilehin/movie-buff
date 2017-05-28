@@ -80,7 +80,7 @@ public class MovieActivity extends AppCompatActivity {
 
     private void restartLoader(String s) {
         Random random = new Random();
-        int uniqueId = anyRandomInt(random);
+        int uniqueId = anyRandomInt(random); //Generates a new ID for each loader call;
 
         bundle.putString("query", s);
 
@@ -170,7 +170,6 @@ public class MovieActivity extends AppCompatActivity {
 
     /**
      * Method used to install the Calligraphy library
-     *
      * @param newBase
      */
     @Override
