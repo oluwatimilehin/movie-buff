@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -88,7 +87,6 @@ public class MovieActivity extends AppCompatActivity {
             getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, bundle, new
                     MovieDataLoader());
         } else {
-            Log.d("CONNECTED", "I'm here");
             getSupportLoaderManager().initLoader(uniqueId, bundle, new MovieDataLoader());
         }
     }
