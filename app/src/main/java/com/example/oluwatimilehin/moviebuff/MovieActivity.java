@@ -2,7 +2,6 @@ package com.example.oluwatimilehin.moviebuff;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -45,8 +44,7 @@ public class MovieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
 
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //Prevents the
-        // screen from being rotatable
+      //  this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Raleway-Light.ttf")
@@ -91,6 +89,11 @@ public class MovieActivity extends AppCompatActivity {
         } else {
             getSupportLoaderManager().initLoader(uniqueId, bundle, new MovieDataLoader());
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
