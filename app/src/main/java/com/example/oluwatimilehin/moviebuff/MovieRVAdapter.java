@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class MovieRVAdapter extends RecyclerView.Adapter<MovieRVAdapter.MovieViewHolder> {
 
     ArrayList<Movies> mMovies = new ArrayList<Movies>();
+    private static ClickListener clickListener;
 
     public MovieRVAdapter(ArrayList<Movies> movies){
         mMovies = movies;
@@ -46,19 +47,33 @@ public class MovieRVAdapter extends RecyclerView.Adapter<MovieRVAdapter.MovieVie
         return mMovies.size();
     }
 
-    public static class MovieViewHolder extends RecyclerView.ViewHolder {
+    public static class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView imageView;
         TextView titleTextView;
         TextView dateTextView;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
+
+            itemView.setOnClickListener(this);
             imageView = (ImageView) itemView.findViewById(R.id.image);
             titleTextView = (TextView) itemView.findViewById(R.id.tv_title);
             dateTextView = (TextView) itemView.findViewById(R.id.tv_year);
 
         }
+
+        @Override
+        public void onClick(View view) {
+            clickListener.onItemClick(getAdapterPosition(), view);
+        }
     }
 
+    public void setOnItemClickListener(ClickListener listener){
+        MovieRVAdapter.clickListener = listener;
+    }
+
+    public interface ClickListener{
+        void onItemClick(int position, View v);
+    }
 
 }

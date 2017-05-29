@@ -1,6 +1,7 @@
 package com.example.oluwatimilehin.moviebuff;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -182,6 +183,9 @@ public class MovieActivity extends AppCompatActivity {
         MovieRVAdapter adapter = null;
         RecyclerView rv = (RecyclerView) findViewById(R.id.rv_movies);
 
+
+
+
         private void showErrorScreen(){
             mErrorTv.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.INVISIBLE);
@@ -227,7 +231,14 @@ public class MovieActivity extends AppCompatActivity {
             } else {
                 showErrorScreen();
             }
+            adapter.setOnItemClickListener(new MovieRVAdapter.ClickListener() {
+                @Override
+                public void onItemClick(int position, View v) {
 
+                    Intent i = new Intent(MovieActivity.this, DetailActivity.class);
+                    startActivity(i);
+                }
+            });
 
         }
 
