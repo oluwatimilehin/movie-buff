@@ -13,7 +13,7 @@ Popular Movies:
 
 ![Popular](/screenshots/popular.png "Popular Movies")
 
-Menu item:
+Menu items:
 
 ![Sort by](/screenshots/menu.png)
 
@@ -21,10 +21,12 @@ Top Rated Movies:
 
 ![Top rated](/screenshots/top-rated.png)
 
-Detail Screen:
+Details Screen:
+
 ![Detail](/screenshots/detail.png)
 
 Error Screen:
+
 ![Error](/screenshots/error.png)
 
 
