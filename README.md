@@ -19,13 +19,13 @@ Menu item:
 
 Top Rated Movies:
 
-![Top rated] (/screenshots/top-rated.png)
+![Top rated](/screenshots/top-rated.png)
 
 Detail Screen:
-![Detail] (/screenshots/detail.png)
+![Detail](/screenshots/detail.png)
 
 Error Screen:
-![Error] (/screenshots/error.png)
+![Error](/screenshots/error.png)
 
 
 
