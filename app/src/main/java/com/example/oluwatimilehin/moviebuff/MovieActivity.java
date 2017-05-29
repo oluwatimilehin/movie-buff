@@ -234,9 +234,21 @@ public class MovieActivity extends AppCompatActivity {
             adapter.setOnItemClickListener(new MovieRVAdapter.ClickListener() {
                 @Override
                 public void onItemClick(int position, View v) {
+                    Movies currentMovie = movies.get(position);
+                    String title = currentMovie.getTitle();
+                    String imageUrl = currentMovie.getImageUrl();
+                    String rating = currentMovie.getRating();
+                    String plot = currentMovie.getPlot();
+                    String releaseDate = currentMovie.getReleaseDate();
 
-                    Intent i = new Intent(MovieActivity.this, DetailActivity.class);
-                    startActivity(i);
+                    Intent callingIntent = new Intent(MovieActivity.this, DetailActivity.class);
+                    callingIntent.putExtra("title", title);
+                    callingIntent.putExtra("imageUrl", imageUrl);
+                    callingIntent.putExtra("rating", rating);
+                    callingIntent.putExtra("plot", plot);
+                    callingIntent.putExtra("releaseDate", releaseDate);
+
+                    startActivity(callingIntent);
                 }
             });
 
