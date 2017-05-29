@@ -22,8 +22,12 @@ public class DetailActivity extends AppCompatActivity {
     private TextView mToolbarText;
     private ImageView mImageView;
     private TextView ratingTV;
-    private TextView userRatingTV;
-    private TextView titleTv;
+    private TextView userRatingStringTV;
+    private TextView releaseDateStringTV;
+    private TextView releaseDateTV;
+    private TextView titleTV;
+    private TextView plotTV;
+    private TextView errorTV;
     private ProgressBar loadingIndicator;
 
 
@@ -38,18 +42,22 @@ public class DetailActivity extends AppCompatActivity {
         mToolbarText.setText(R.string.movie_detail);
 
         mImageView = (ImageView) findViewById(R.id.thumbnail_image);
+        errorTV = (TextView) findViewById(R.id.error_tv);
         ratingTV = (TextView) findViewById(R.id.rating_tv);
-        titleTv = (TextView) findViewById(R.id.title_tv);
-        userRatingTV = (TextView) findViewById(R.id.user_rating_text);
+        titleTV = (TextView) findViewById(R.id.title_tv);
+        userRatingStringTV = (TextView) findViewById(R.id.user_rating_text);
         loadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator);
+        releaseDateStringTV = (TextView) findViewById(R.id.release_date_text);
+        releaseDateTV = (TextView) findViewById(R.id.release_date);
+        plotTV = (TextView) findViewById(R.id.plot_tv);
 
         Intent callingIntent = getIntent();
 
-        final String title = callingIntent.getStringExtra("title");
+        final String title = callingIntent.getStringExtra("title").toUpperCase();
         final String imagePath = callingIntent.getStringExtra("imageUrl");
         final String userRating = callingIntent.getStringExtra("rating");
-        String plot = callingIntent.getStringExtra("plot");
-        String releaseDate = callingIntent.getStringExtra("releaseDate");
+        final String plot = callingIntent.getStringExtra("plot");
+        final String releaseDate = callingIntent.getStringExtra("releaseDate");
         String fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
@@ -62,14 +70,19 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 ratingTV.append(userRating);
-                titleTv.setText(title);
-                userRatingTV.setVisibility(View.VISIBLE);
+                titleTV.setText(title);
+                releaseDateTV.setText(releaseDate);
+                plotTV.setText(plot);
+
+                userRatingStringTV.setVisibility(View.VISIBLE);
+                releaseDateStringTV.setVisibility(View.VISIBLE);
                 loadingIndicator.setVisibility(View.GONE);
             }
 
             @Override
             public void onError() {
-
+                errorTV.setVisibility(View.VISIBLE);
+                loadingIndicator.setVisibility(View.INVISIBLE);
             }
         };
 

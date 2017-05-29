@@ -5,72 +5,123 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.oluwatimilehin.moviebuff.DetailActivity"
     android:background="@color/backgroundColor"
-    android:orientation="vertical"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.example.oluwatimilehin.moviebuff.DetailActivity"
     tools:ignore="MissingPrefix">
 
-    <include layout="@layout/toolbar"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"/>
+    <include
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:orientation="horizontal">
-        
+
+
         <ImageView
-            android:layout_margin="25dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
+            android:id="@+id/thumbnail_image"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:id="@+id/thumbnail_image"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="25dp"
             />
 
+
         <ProgressBar
+            android:id="@+id/loading_indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:id="@+id/loading_indicator"/>
+            android:layout_centerInParent="true"/>
 
         <TextView
-            android:layout_toRightOf="@id/thumbnail_image"
-            android:layout_toEndOf="@id/thumbnail_image"
+            android:id="@+id/error_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/internet_error"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/user_rating_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="0dp"
+            android:layout_marginTop="120dp"
+            android:layout_toEndOf="@id/thumbnail_image"
+            android:layout_toRightOf="@id/thumbnail_image"
             android:text="@string/user_rating"
-            android:id="@+id/user_rating_text"
-            android:layout_centerVertical="true"
             android:textColor="@color/textColor"
             android:textSize="20sp"
             android:visibility="invisible"
             />
+
         <TextView
-            android:paddingTop="0dp"
-            android:layout_width="wrap_content"
+            android:id="@+id/rating_tv"
+            fontPath="fonts/Raleway-Medium.ttf"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/user_rating_text"
-            android:layout_toRightOf="@id/thumbnail_image"
             android:layout_toEndOf="@id/thumbnail_image"
+            android:layout_toRightOf="@id/thumbnail_image"
+            android:gravity="center"
             android:textColor="@color/textColor"
-            android:textSize="25sp"
-            fontPath = "fonts/Raleway-Regular.ttf"
-            android:id="@+id/rating_tv"/>
+            android:textSize="40sp"/>
+
+        <TextView
+            android:id="@+id/release_date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rating_tv"
+            android:layout_marginTop="23dp"
+            android:layout_toEndOf="@id/thumbnail_image"
+            android:layout_toRightOf="@id/thumbnail_image"
+            android:text="@string/release_date"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/release_date_text"
+            android:layout_toEndOf="@id/thumbnail_image"
+            android:layout_toRightOf="@id/thumbnail_image"
+            android:padding="10dp"
+            android:textColor="@color/textColor"
+            android:textSize="25sp"/>
+
     </RelativeLayout>
 
+
     <TextView
+        android:id="@+id/title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/title_tv"
-        android:textSize="23sp"
-        tools:text="The God's must be crazy"
-        android:gravity="center_vertical"
-        android:textColor="@color/textColor"/>
-    
+        android:gravity="center"
+        android:textColor="@color/textColor"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:text="The God's must be crazy"/>
 
-     
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/plot_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="5dp"
+            android:padding="20dp"
+            android:textColor="@color/textColor"
+            android:textSize="18sp"/>
+
+    </ScrollView>
+
 </LinearLayout>
