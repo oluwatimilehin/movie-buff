@@ -66,6 +66,11 @@ public class MovieActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
     /**
      * This method is to generate a new random integer so that the loader has a unique ID.
      *
@@ -91,10 +96,7 @@ public class MovieActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -186,9 +188,6 @@ public class MovieActivity extends AppCompatActivity {
         MovieRVAdapter adapter = null;
         RecyclerView rv = (RecyclerView) findViewById(R.id.rv_movies);
 
-
-
-
         private void showErrorScreen(){
             mErrorTv.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.INVISIBLE);
@@ -245,6 +244,7 @@ public class MovieActivity extends AppCompatActivity {
                     String releaseDate = currentMovie.getReleaseDate();
 
                     Intent callingIntent = new Intent(MovieActivity.this, DetailActivity.class);
+
                     callingIntent.putExtra("title", title);
                     callingIntent.putExtra("imageUrl", imageUrl);
                     callingIntent.putExtra("rating", rating);
@@ -256,6 +256,8 @@ public class MovieActivity extends AppCompatActivity {
             });
 
         }
+
+
 
         @Override
         public void onLoaderReset(Loader<ArrayList<Movies>> loader) {
