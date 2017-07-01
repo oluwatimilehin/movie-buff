@@ -134,6 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                fontpath="fonts/Raleway-Regular.ttf"
                 android:textColor="@color/textColor"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -150,16 +151,29 @@
                 android:textSize="18sp"/>
 
             <TextView
+                android:id="@+id/user_reviews_label"
                 android:layout_width="match_parent"
+                android:layout_marginTop="15dp"
                 android:layout_height="wrap_content"
                 android:text="@string/reviews"
                 android:textColor="@color/textColor"
                 android:textSize="20sp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:textStyle="italic"
+                android:gravity="center"
                 fontPath="fonts/Raleway-LightItalic.ttf"
+                android:visibility="invisible"
                 />
+
+                <TextView
+                    android:id="@+id/user_review"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/review_placeholder"
+                    android:textColor="@color/textColor"
+                    fontPath="fonts/Raleway-Italic.ttf"
+                    android:textSize="18sp"
+                    android:padding="10dp"
+                    android:lineSpacingExtra="5dp"
+                    android:visibility="invisible"/>
 
 
 

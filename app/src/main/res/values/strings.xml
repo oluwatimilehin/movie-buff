@@ -10,5 +10,7 @@
     <string name="movie_detail">Movie Details</string>
     <string name="user_rating">USER RATING:</string>
     <string name="release_date">RELEASE DATE:</string>
-    <string name="reviews">REVIEWS</string>
+    <string name="reviews">USER REVIEWS</string>
+    <string name="review_placeholder">Disney\'s done a great job with Gaston and The Beast, the
+        two aspects that I always thought would be the most important, and the most difficult, to nail.\r\n\r\nFinal rating:★★★ - I personally recommend you give it a go.</string>
 </resources>
