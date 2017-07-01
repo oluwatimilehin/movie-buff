@@ -10,5 +10,5 @@
     <string name="movie_detail">Movie Details</string>
     <string name="user_rating">USER RATING:</string>
     <string name="release_date">RELEASE DATE:</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">REVIEWS</string>
 </resources>
