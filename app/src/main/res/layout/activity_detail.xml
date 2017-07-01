@@ -41,16 +41,28 @@
                     />
 
                 <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="130dp"
+                    android:id="@+id/play_button"
+                    android:visibility="invisible"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginStart="100dp"
+                    android:src="@drawable/ic_play_circle_outline_white_24dp"/>
+
+                <ImageView
                     android:id="@+id/star"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_toRightOf="@id/thumbnail_image"
-                    android:layout_toEndOf="@id/thumbnail_image"
-                    android:layout_marginTop="50dp"
                     android:layout_marginLeft="25dp"
-                    android:visibility="invisible"
                     android:layout_marginStart="25dp"
-                    android:src="@drawable/ic_star_border_white_48dp"/>
+                    android:layout_marginTop="50dp"
+                    android:layout_toEndOf="@id/thumbnail_image"
+                    android:layout_toRightOf="@id/thumbnail_image"
+                    android:src="@drawable/ic_star_border_white_48dp"
+                    android:visibility="invisible"/>
 
                 <ProgressBar
                     android:id="@+id/loading_indicator"
@@ -117,7 +129,6 @@
 
             </RelativeLayout>
 
-
             <TextView
                 android:id="@+id/title_tv"
                 android:layout_width="match_parent"
@@ -137,6 +148,16 @@
                 android:padding="20dp"
                 android:textColor="@color/textColor"
                 android:textSize="18sp"/>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:visibility="invisible"/>
+
+
+
 
         </LinearLayout>
 

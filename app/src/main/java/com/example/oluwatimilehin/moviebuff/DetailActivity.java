@@ -38,6 +38,8 @@ public class DetailActivity extends AppCompatActivity {
     private TextView errorTV;
     private ProgressBar loadingIndicator;
     private ImageView starImage;
+    private View divider;
+    private ImageView playButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,8 @@ public class DetailActivity extends AppCompatActivity {
         releaseDateTV = (TextView) findViewById(R.id.release_date);
         plotTV = (TextView) findViewById(R.id.plot_tv);
         starImage = (ImageView) findViewById(R.id.star);
+        playButton = (ImageView) findViewById(R.id.play_button);
+        divider =  findViewById(R.id.divider);
 
         Intent callingIntent = getIntent();
 
@@ -71,11 +75,6 @@ public class DetailActivity extends AppCompatActivity {
         final String releaseDate = callingIntent.getStringExtra("releaseDate");
         String fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
 
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/Raleway-Light.ttf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
 
         final Callback mCallback = new Callback() {
             @Override
@@ -88,6 +87,8 @@ public class DetailActivity extends AppCompatActivity {
                 userRatingStringTV.setVisibility(View.VISIBLE);
                 releaseDateStringTV.setVisibility(View.VISIBLE);
                 loadingIndicator.setVisibility(View.GONE);
+                divider.setVisibility(View.VISIBLE);
+                playButton.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -101,13 +102,24 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/Raleway-Light.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+    }
+
     @RequiresApi(api = M)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         Drawable upIcon = mToolbar.getNavigationIcon();
 
-        if (upIcon != null){
+        if (upIcon != null) {
             upIcon.mutate();
             upIcon.setColorFilter(getResources().getColor(R.color.textColor, null), PorterDuff.Mode.SRC_ATOP);
         }
