@@ -15,12 +15,17 @@ public class Movies {
     String mReleaseDate;
 
 
-    public Movies(String title, String releaseDate, String imageUrl, String plot, String rating){
+    int mId;
+
+
+    public Movies(String title, String releaseDate, String imageUrl, String plot, String rating,
+                  int id){
         mTitle = title;
         mImageUrl = imageUrl;
         mPlot = plot;
         mRating = rating;
         mReleaseDate = releaseDate;
+        mId = id;
     }
 
     public String getTitle() {
@@ -36,6 +41,10 @@ public class Movies {
     public String getYear() {
         mYear = mReleaseDate.substring(0, 4);
         return mYear;
+    }
+
+    public int getId() {
+        return mId;
     }
 
     public String getPlot() {

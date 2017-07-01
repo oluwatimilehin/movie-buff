@@ -68,6 +68,9 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent callingIntent = getIntent();
 
+        mImageView.setColorFilter(getResources().getColor(R.color.cardview_dark_background),
+                PorterDuff.Mode.MULTIPLY);
+
         final String title = callingIntent.getStringExtra("title").toUpperCase();
         final String imagePath = callingIntent.getStringExtra("imageUrl");
         final String userRating = callingIntent.getStringExtra("rating");

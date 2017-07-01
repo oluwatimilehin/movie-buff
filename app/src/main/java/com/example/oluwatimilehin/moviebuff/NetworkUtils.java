@@ -42,7 +42,8 @@ public class NetworkUtils extends AppCompatActivity {
                     String path = results.getString("poster_path");
                     String synopsis = results.getString("overview");
                     String rating = results.getString("vote_average");
-                    movies.add(new Movies(title, release_date, path, synopsis, rating));
+                    int id = results.getInt("id");
+                    movies.add(new Movies(title, release_date, path, synopsis, rating, id));
                 }
             }
 
