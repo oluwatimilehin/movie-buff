@@ -37,7 +37,7 @@ public class DetailActivity extends AppCompatActivity {
     private TextView plotTV;
     private TextView errorTV;
     private ProgressBar loadingIndicator;
-
+    private ImageView starImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +60,7 @@ public class DetailActivity extends AppCompatActivity {
         releaseDateStringTV = (TextView) findViewById(R.id.release_date_text);
         releaseDateTV = (TextView) findViewById(R.id.release_date);
         plotTV = (TextView) findViewById(R.id.plot_tv);
+        starImage = (ImageView) findViewById(R.id.star);
 
         Intent callingIntent = getIntent();
 
@@ -83,7 +84,7 @@ public class DetailActivity extends AppCompatActivity {
                 titleTV.setText(title);
                 releaseDateTV.setText(releaseDate);
                 plotTV.setText(plot);
-
+                starImage.setVisibility(View.VISIBLE);
                 userRatingStringTV.setVisibility(View.VISIBLE);
                 releaseDateStringTV.setVisibility(View.VISIBLE);
                 loadingIndicator.setVisibility(View.GONE);
