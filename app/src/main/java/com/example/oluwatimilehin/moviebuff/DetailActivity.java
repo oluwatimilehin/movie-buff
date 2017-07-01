@@ -38,7 +38,6 @@ public class DetailActivity extends AppCompatActivity {
     private TextView errorTV;
     private ProgressBar loadingIndicator;
     private ImageView starImage;
-    private View divider;
     private ImageView playButton;
 
     @Override
@@ -64,7 +63,7 @@ public class DetailActivity extends AppCompatActivity {
         plotTV = (TextView) findViewById(R.id.plot_tv);
         starImage = (ImageView) findViewById(R.id.star);
         playButton = (ImageView) findViewById(R.id.play_button);
-        divider =  findViewById(R.id.divider);
+
 
         Intent callingIntent = getIntent();
 
@@ -76,6 +75,7 @@ public class DetailActivity extends AppCompatActivity {
         final String userRating = callingIntent.getStringExtra("rating");
         final String plot = callingIntent.getStringExtra("plot");
         final String releaseDate = callingIntent.getStringExtra("releaseDate");
+        final  int id = callingIntent.getIntExtra("id", 1);
         String fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
 
 
@@ -90,7 +90,6 @@ public class DetailActivity extends AppCompatActivity {
                 userRatingStringTV.setVisibility(View.VISIBLE);
                 releaseDateStringTV.setVisibility(View.VISIBLE);
                 loadingIndicator.setVisibility(View.GONE);
-                divider.setVisibility(View.VISIBLE);
                 playButton.setVisibility(View.VISIBLE);
             }
 

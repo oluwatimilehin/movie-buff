@@ -240,6 +240,7 @@ public class MovieActivity extends AppCompatActivity {
                     String rating = currentMovie.getRating();
                     String plot = currentMovie.getPlot();
                     String releaseDate = currentMovie.getReleaseDate();
+                    int id = currentMovie.getId();
 
                     Intent callingIntent = new Intent(MovieActivity.this, DetailActivity.class);
 
@@ -248,6 +249,7 @@ public class MovieActivity extends AppCompatActivity {
                     callingIntent.putExtra("rating", rating);
                     callingIntent.putExtra("plot", plot);
                     callingIntent.putExtra("releaseDate", releaseDate);
+                    callingIntent.putExtra("id", id);
 
                     startActivity(callingIntent);
                 }

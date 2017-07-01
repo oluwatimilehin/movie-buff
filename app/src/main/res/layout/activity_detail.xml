@@ -149,12 +149,17 @@
                 android:textColor="@color/textColor"
                 android:textSize="18sp"/>
 
-            <View
-                android:id="@+id/divider"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"
-                android:visibility="invisible"/>
+                android:layout_height="wrap_content"
+                android:text="@string/reviews"
+                android:textColor="@color/textColor"
+                android:textSize="20sp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:textStyle="italic"
+                />
+
 
 
 
