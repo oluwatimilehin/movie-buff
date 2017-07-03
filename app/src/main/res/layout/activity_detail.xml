@@ -8,6 +8,7 @@
     android:background="@color/backgroundColor"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:id="@+id/detail_layout"
     tools:context="com.example.oluwatimilehin.moviebuff.DetailActivity"
     tools:ignore="MissingPrefix">
 

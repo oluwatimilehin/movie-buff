@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -50,6 +51,7 @@ public class DetailActivity extends AppCompatActivity {
     private TextView reviewLabel;
     private TextView userReview;
     private Callback mCallback;
+    private LinearLayout mLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,9 +191,13 @@ public class DetailActivity extends AppCompatActivity {
                 ArrayList<Reviews> reviews = data.getParcelableArrayList("reviews");
                 final String youtubeLink = "https://www.youtube.com/watch?v=" + youtubeKey;
 
-//                String content = reviews.get(0).getContent();
-//                String author = reviews.get(0).getAuthor();
-//                userReview.setText(content + "-" + author);
+                mLinearLayout = (LinearLayout) findViewById(R.id.detail_layout);
+
+                for(Reviews review: reviews){
+
+                    userReview.append(review.getContent());
+
+                }
 
 
                 Picasso.with(DetailActivity.this).load(fullUrl).into(mImageView, mCallback);
