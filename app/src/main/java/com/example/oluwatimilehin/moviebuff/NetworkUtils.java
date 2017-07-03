@@ -1,6 +1,7 @@
 package com.example.oluwatimilehin.moviebuff;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import org.json.JSONArray;
@@ -22,6 +23,11 @@ import java.util.ArrayList;
  */
 
 public class NetworkUtils extends AppCompatActivity {
+
+    static final String MOVIE_SCHEME = "https";
+    static final String MOVIE_AUTHORITY = "api.themoviedb.org";
+    static final String reviewsKey = "reviews";
+    static final String videosKey = "videos";
 
 
     public static ArrayList<Movies> parseJson(String key, String apiKey) {
@@ -56,6 +62,74 @@ public class NetworkUtils extends AppCompatActivity {
 
     }
 
+    public static Bundle parseJson(int id, String apiKey) {
+
+        Bundle bundle = new Bundle();
+        URL reviewsURL = buildUrl(id, reviewsKey, apiKey);
+        URL videosURL = buildUrl(id, videosKey, apiKey);
+
+        ArrayList<Reviews> reviews = new ArrayList<Reviews>();
+        String reviewsString = extractResult(reviewsURL);
+        String videosString = extractResult(videosURL);
+        String youtubeKey = "";
+        String author;
+        String content;
+
+        try{
+            JSONObject videosJSON =new JSONObject(videosString);
+            JSONArray videosArray = videosJSON.getJSONArray("results");
+            for(int i = 0; i < videosArray.length(); i ++){
+                JSONObject currentObject = videosArray.getJSONObject(i);
+                String type = currentObject.getString("type");
+                if(type.equals("Trailer")){
+                    youtubeKey = currentObject.getString("key");
+                    break;
+                }
+            }
+
+            JSONObject reviewsJSON = new JSONObject(reviewsString);
+            JSONArray reviewsArray = reviewsJSON.getJSONArray("results");
+            for(int i = 0; i < reviewsArray.length(); i++){
+                JSONObject currentObject = reviewsArray.getJSONObject(i);
+                author = currentObject.getString("author");
+                content = currentObject.getString("content");
+                reviews.add(new Reviews(author, content));
+            }
+
+        } catch (JSONException | NullPointerException e){
+            e.printStackTrace();
+            return null;
+        }
+
+        bundle.putString("youtube_key", youtubeKey );
+        bundle.putParcelableArrayList("reviews", reviews);
+        return  bundle;
+    }
+
+
+    private static URL buildUrl(int id, String key, String apiKey) {
+        URL url = null;
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(MOVIE_SCHEME)
+                .authority(MOVIE_AUTHORITY)
+                .appendPath("3")
+                .appendPath("movie")
+                .appendPath(String.valueOf(id))
+                .appendPath(key)
+                .appendQueryParameter("api_key", apiKey)
+                .build();
+
+        try {
+            url = new URL(builder.toString());
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+
+    }
 
     /**
      * Construct the URL used to make a connection
@@ -65,9 +139,6 @@ public class NetworkUtils extends AppCompatActivity {
      */
     private static URL buildUrl(String keyword, String apiKey) {
         URL url = null;
-
-        final String MOVIE_SCHEME = "https";
-        final String MOVIE_AUTHORITY = "api.themoviedb.org";
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(MOVIE_SCHEME)
@@ -88,17 +159,11 @@ public class NetworkUtils extends AppCompatActivity {
         return url;
     }
 
-    /**
-     * Method to return the JSON response from the API call
-     *
-     * @return
-     */
-    private static String extractResult(URL url) {
+    private static StringBuffer makeHttRequest(URL url) {
 
         BufferedReader reader = null;
         HttpURLConnection urlConnection = null;
-
-        String movieJSON = null;
+        StringBuffer buffer = new StringBuffer();
 
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -106,7 +171,7 @@ public class NetworkUtils extends AppCompatActivity {
             urlConnection.connect();
 
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+
             if (inputStream == null) {
                 return null;
             }
@@ -122,7 +187,6 @@ public class NetworkUtils extends AppCompatActivity {
                 return null;
             }
 
-            movieJSON = buffer.toString();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -140,6 +204,18 @@ public class NetworkUtils extends AppCompatActivity {
                 urlConnection.disconnect();
             }
         }
-        return movieJSON;
+
+        return buffer;
+    }
+
+    /**
+     * Method to return the JSON response from the API call
+     *
+     * @return
+     */
+    private static String extractResult(URL url) {
+
+        StringBuffer buffer = makeHttRequest(url);
+        return buffer != null ? buffer.toString() : null;
     }
 }

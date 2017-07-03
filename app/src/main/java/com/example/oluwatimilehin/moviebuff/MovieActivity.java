@@ -231,30 +231,31 @@ public class MovieActivity extends AppCompatActivity {
             } else {
                 showErrorScreen();
             }
-            adapter.setOnItemClickListener(new MovieRVAdapter.ClickListener() {
-                @Override
-                public void onItemClick(int position, View v) {
-                    Movies currentMovie = movies.get(position);
-                    String title = currentMovie.getTitle();
-                    String imageUrl = currentMovie.getImageUrl();
-                    String rating = currentMovie.getRating();
-                    String plot = currentMovie.getPlot();
-                    String releaseDate = currentMovie.getReleaseDate();
-                    int id = currentMovie.getId();
+            if(adapter != null) {
+                adapter.setOnItemClickListener(new MovieRVAdapter.ClickListener() {
+                    @Override
+                    public void onItemClick(int position, View v) {
+                        Movies currentMovie = movies.get(position);
+                        String title = currentMovie.getTitle();
+                        String imageUrl = currentMovie.getImageUrl();
+                        String rating = currentMovie.getRating();
+                        String plot = currentMovie.getPlot();
+                        String releaseDate = currentMovie.getReleaseDate();
+                        int id = currentMovie.getId();
 
-                    Intent callingIntent = new Intent(MovieActivity.this, DetailActivity.class);
+                        Intent callingIntent = new Intent(MovieActivity.this, DetailActivity.class);
 
-                    callingIntent.putExtra("title", title);
-                    callingIntent.putExtra("imageUrl", imageUrl);
-                    callingIntent.putExtra("rating", rating);
-                    callingIntent.putExtra("plot", plot);
-                    callingIntent.putExtra("releaseDate", releaseDate);
-                    callingIntent.putExtra("id", id);
+                        callingIntent.putExtra("title", title);
+                        callingIntent.putExtra("imageUrl", imageUrl);
+                        callingIntent.putExtra("rating", rating);
+                        callingIntent.putExtra("plot", plot);
+                        callingIntent.putExtra("releaseDate", releaseDate);
+                        callingIntent.putExtra("id", id);
 
-                    startActivity(callingIntent);
-                }
-            });
-
+                        startActivity(callingIntent);
+                    }
+                });
+            }
         }
 
 
