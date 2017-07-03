@@ -1,6 +1,6 @@
 package com.example.oluwatimilehin.moviebuff;
 
-import android.content.AsyncTaskLoader;
+import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -12,12 +12,12 @@ import android.os.Bundle;
 public class DetailsLoader extends AsyncTaskLoader<Bundle> {
 
     String apiKey;
-    int id;
+    Bundle mBundle;
 
-    public DetailsLoader(Context context, String apiKey, int id) {
+    public DetailsLoader(Context context, String apiKey, Bundle bundle) {
         super(context);
         this.apiKey = apiKey;
-        this.id = id;
+        mBundle = bundle;
     }
 
     @Override
@@ -27,6 +27,8 @@ public class DetailsLoader extends AsyncTaskLoader<Bundle> {
 
     @Override
     public Bundle loadInBackground() {
+
+        int id = mBundle.getInt("id");
         return NetworkUtils.parseJson(id, apiKey);
     }
 }

@@ -1,12 +1,16 @@
 package com.example.oluwatimilehin.moviebuff;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -19,6 +23,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -26,6 +32,8 @@ import static android.os.Build.VERSION_CODES.M;
 
 public class DetailActivity extends AppCompatActivity {
 
+    private static final int DETAILS_LOADER_ID = 916;
+    String fullUrl;
     private Toolbar mToolbar;
     private TextView mToolbarText;
     private ImageView mImageView;
@@ -41,6 +49,7 @@ public class DetailActivity extends AppCompatActivity {
     private ImageView playButton;
     private TextView reviewLabel;
     private TextView userReview;
+    private Callback mCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +75,7 @@ public class DetailActivity extends AppCompatActivity {
         starImage = (ImageView) findViewById(R.id.star);
         playButton = (ImageView) findViewById(R.id.play_button);
         reviewLabel = (TextView) findViewById(R.id.user_reviews_label);
-        userReview = (TextView)  findViewById(R.id.user_review);
+        userReview = (TextView) findViewById(R.id.user_review);
 
 
         Intent callingIntent = getIntent();
@@ -79,14 +88,14 @@ public class DetailActivity extends AppCompatActivity {
         final String userRating = callingIntent.getStringExtra("rating");
         final String plot = callingIntent.getStringExtra("plot");
         final String releaseDate = callingIntent.getStringExtra("releaseDate");
-        final  int id = callingIntent.getIntExtra("id", 1);
-        String fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
+        final int id = callingIntent.getIntExtra("id", 1);
+        fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
 
 
-        final Callback mCallback = new Callback() {
+        mCallback = new Callback() {
             @Override
             public void onSuccess() {
-                ratingTV.append(userRating);
+                ratingTV.setText(userRating);
                 titleTV.setText(title);
                 releaseDateTV.setText(releaseDate);
                 plotTV.setText(plot);
@@ -106,19 +115,21 @@ public class DetailActivity extends AppCompatActivity {
             }
         };
 
-        Picasso.with(this).load(fullUrl).into(mImageView, mCallback);
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", id);
+        getSupportLoaderManager().initLoader(DETAILS_LOADER_ID, bundle, new DetailsDataLoader());
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Raleway-Light.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+
     }
 
     @RequiresApi(api = M)
@@ -155,5 +166,55 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    public class DetailsDataLoader implements LoaderManager.LoaderCallbacks<Bundle> {
+
+        @Override
+        public Loader<Bundle> onCreateLoader(int id, Bundle args) {
+
+            String apiKey = getString(R.string.api_key);
+
+            if (true) {
+                return new DetailsLoader(DetailActivity.this, apiKey, args);
+            }
+            return null;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Bundle> loader, Bundle data) {
+
+            if (data != null) {
+                final String youtubeKey = data.getString("youtube_key");
+                ArrayList<Reviews> reviews = data.getParcelableArrayList("reviews");
+                final String youtubeLink = "https://www.youtube.com/watch?v=" + youtubeKey;
+
+//                String content = reviews.get(0).getContent();
+//                String author = reviews.get(0).getAuthor();
+//                userReview.setText(content + "-" + author);
+
+
+                Picasso.with(DetailActivity.this).load(fullUrl).into(mImageView, mCallback);
+                mImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd" +
+                                ".youtube:" + youtubeKey));
+                        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink));
+
+                        try {
+                            startActivity(appIntent);
+                        } catch (ActivityNotFoundException e) {
+                            startActivity(webIntent);
+                        }
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Bundle> loader) {
+
+        }
     }
 }

@@ -167,7 +167,7 @@
                     android:id="@+id/user_review"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/review_placeholder"
+                    tools:text="@string/review_placeholder"
                     android:textColor="@color/textColor"
                     fontPath="fonts/Raleway-Italic.ttf"
                     android:textSize="18sp"

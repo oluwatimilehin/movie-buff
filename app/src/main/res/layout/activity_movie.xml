@@ -12,46 +12,49 @@
     tools:context="com.example.oluwatimilehin.moviebuff.MovieActivity">
 
 
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <android.support.design.widget.CoordinatorLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/main_content"
+        <TextView
+            android:id="@+id/error_tv"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/textColor"
+            android:visibility="invisible"/>
+
+        <ProgressBar
+            android:id="@+id/pb_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible"/>
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+
+            <include
+                layout="@layout/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|enterAlways"
+                />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="wrap_content"
             android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/error_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@color/textColor"
-                android:visibility="invisible"/>
-
-            <ProgressBar
-                android:id="@+id/pb_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="invisible"/>
-
-            <android.support.design.widget.AppBarLayout
-                android:id="@+id/appBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
-
-
-                <include
-                    layout="@layout/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_scrollFlags="scroll|enterAlways"/>
-
-            </android.support.design.widget.AppBarLayout>
-
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_movies"
@@ -59,8 +62,8 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        </android.support.v4.widget.NestedScrollView>
 
-
-        </android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>

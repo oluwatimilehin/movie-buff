@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +39,9 @@ public class MovieActivity extends AppCompatActivity {
     private TextView toolbarText;
     private Bundle bundle = new Bundle();
     private TextView mErrorTv;
+    RecyclerView rv ;
+    long currentVisiblePosition = 0;
+    AppBarLayout mAppBarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,11 @@ public class MovieActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.pb_indicator);
         mErrorTv = (TextView) findViewById(R.id.error_tv);
 
+        rv = (RecyclerView) findViewById(R.id.rv_movies);
+        rv.setNestedScrollingEnabled(false);
+
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.appBar);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarText = (TextView) findViewById(R.id.toolbar_text);
         setSupportActionBar(toolbar);
@@ -67,6 +76,10 @@ public class MovieActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        if(rv.getLayoutManager() != null) {
+            currentVisiblePosition =((GridLayoutManager) rv.getLayoutManager())
+                    .findFirstCompletelyVisibleItemPosition();
+        }
     }
 
     /**
@@ -159,7 +172,7 @@ public class MovieActivity extends AppCompatActivity {
      *
      * @return
      */
-    private boolean isConnected() {
+    public  boolean isConnected() {
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext()
                 .getSystemService(CONNECTIVITY_SERVICE);
 
@@ -169,6 +182,19 @@ public class MovieActivity extends AppCompatActivity {
         }
         return false;
     }
+
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(rv.getLayoutManager() != null) {
+            rv.smoothScrollToPosition((int) currentVisiblePosition);
+        }
+    }
+
 
 
     /**
@@ -184,7 +210,7 @@ public class MovieActivity extends AppCompatActivity {
     public class MovieDataLoader implements LoaderManager.LoaderCallbacks<ArrayList<Movies>> {
 
         MovieRVAdapter adapter = null;
-        RecyclerView rv = (RecyclerView) findViewById(R.id.rv_movies);
+
 
         private void showErrorScreen(){
             mErrorTv.setVisibility(View.VISIBLE);
