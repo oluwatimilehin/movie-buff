@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -49,9 +48,8 @@ public class DetailActivity extends AppCompatActivity {
     private ImageView starImage;
     private ImageView playButton;
     private TextView reviewLabel;
-    private TextView userReview;
     private Callback mCallback;
-    private LinearLayout mLinearLayout;
+    private TextView userReview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +63,7 @@ public class DetailActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        userReview = (TextView) findViewById(R.id.user_review);
         mImageView = (ImageView) findViewById(R.id.thumbnail_image);
         errorTV = (TextView) findViewById(R.id.error_tv);
         ratingTV = (TextView) findViewById(R.id.rating_tv);
@@ -77,7 +76,6 @@ public class DetailActivity extends AppCompatActivity {
         starImage = (ImageView) findViewById(R.id.star);
         playButton = (ImageView) findViewById(R.id.play_button);
         reviewLabel = (TextView) findViewById(R.id.user_reviews_label);
-        userReview = (TextView) findViewById(R.id.user_review);
 
 
         Intent callingIntent = getIntent();
@@ -191,14 +189,9 @@ public class DetailActivity extends AppCompatActivity {
                 ArrayList<Reviews> reviews = data.getParcelableArrayList("reviews");
                 final String youtubeLink = "https://www.youtube.com/watch?v=" + youtubeKey;
 
-                mLinearLayout = (LinearLayout) findViewById(R.id.detail_layout);
-
-                for(Reviews review: reviews){
-
-                    userReview.append(review.getContent());
-
+                if (reviews != null) {
+                   userReview.setText(reviews.get(0).getContent() + " -" + reviews.get(0).getAuthor());
                 }
-
 
                 Picasso.with(DetailActivity.this).load(fullUrl).into(mImageView, mCallback);
                 mImageView.setOnClickListener(new View.OnClickListener() {
