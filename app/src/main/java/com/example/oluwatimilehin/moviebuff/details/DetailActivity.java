@@ -212,6 +212,20 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+                mImageView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+
+                        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                        sharingIntent.setType("text/plain");
+                        sharingIntent.putExtra(Intent.EXTRA_TEXT, youtubeLink);
+                        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Youtube link");
+                        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+
+                        return true;
+                    }
+                });
             }
         }
 
