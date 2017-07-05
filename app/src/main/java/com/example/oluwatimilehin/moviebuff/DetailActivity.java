@@ -34,6 +34,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private static final int DETAILS_LOADER_ID = 916;
     String fullUrl;
+    ArrayList<Reviews> reviews;
     private Toolbar mToolbar;
     private TextView mToolbarText;
     private ImageView mImageView;
@@ -104,7 +105,9 @@ public class DetailActivity extends AppCompatActivity {
                 releaseDateStringTV.setVisibility(View.VISIBLE);
                 loadingIndicator.setVisibility(View.GONE);
                 playButton.setVisibility(View.VISIBLE);
-                reviewLabel.setVisibility(View.VISIBLE);
+                if (reviews.size() > 0) {
+                    reviewLabel.setVisibility(View.VISIBLE);
+                }
                 userReview.setVisibility(View.VISIBLE);
             }
 
@@ -186,11 +189,11 @@ public class DetailActivity extends AppCompatActivity {
 
             if (data != null) {
                 final String youtubeKey = data.getString("youtube_key");
-                ArrayList<Reviews> reviews = data.getParcelableArrayList("reviews");
+                reviews = data.getParcelableArrayList("reviews");
                 final String youtubeLink = "https://www.youtube.com/watch?v=" + youtubeKey;
 
-                if (reviews != null) {
-                   userReview.setText(reviews.get(0).getContent() + " -" + reviews.get(0).getAuthor());
+                if (reviews.size() > 0) {
+                    userReview.setText(reviews.get(0).getContent() + " -" + reviews.get(0).getAuthor());
                 }
 
                 Picasso.with(DetailActivity.this).load(fullUrl).into(mImageView, mCallback);
