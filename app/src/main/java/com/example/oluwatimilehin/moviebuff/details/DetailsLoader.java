@@ -1,8 +1,10 @@
-package com.example.oluwatimilehin.moviebuff;
+package com.example.oluwatimilehin.moviebuff.details;
 
 import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Bundle;
+
+import com.example.oluwatimilehin.moviebuff.network.NetworkUtils;
 
 /**
  * Created by Oluwatimilehin on 03/07/2017.

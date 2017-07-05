@@ -9,7 +9,7 @@
     android:background="@color/backgroundColor"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.example.oluwatimilehin.moviebuff.MovieActivity">
+    tools:context="com.example.oluwatimilehin.moviebuff.main.MovieActivity">
 
 
     <android.support.design.widget.CoordinatorLayout

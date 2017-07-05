@@ -1,4 +1,4 @@
-package com.example.oluwatimilehin.moviebuff;
+package com.example.oluwatimilehin.moviebuff.details;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.oluwatimilehin.moviebuff.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 

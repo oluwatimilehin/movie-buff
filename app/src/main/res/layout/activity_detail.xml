@@ -8,7 +8,7 @@
     android:background="@color/backgroundColor"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.example.oluwatimilehin.moviebuff.DetailActivity"
+    tools:context="com.example.oluwatimilehin.moviebuff.details.DetailActivity"
     tools:ignore="MissingPrefix">
 
     <include

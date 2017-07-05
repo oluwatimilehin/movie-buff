@@ -1,4 +1,4 @@
-package com.example.oluwatimilehin.moviebuff;
+package com.example.oluwatimilehin.moviebuff.details;
 
 import android.os.Parcel;
 import android.os.Parcelable;

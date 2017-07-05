@@ -1,8 +1,10 @@
-package com.example.oluwatimilehin.moviebuff;
+package com.example.oluwatimilehin.moviebuff.main;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
+
+import com.example.oluwatimilehin.moviebuff.network.NetworkUtils;
 
 import java.util.ArrayList;
 

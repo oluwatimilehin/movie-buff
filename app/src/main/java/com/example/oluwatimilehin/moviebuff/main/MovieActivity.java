@@ -1,4 +1,4 @@
-package com.example.oluwatimilehin.moviebuff;
+package com.example.oluwatimilehin.moviebuff.main;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.oluwatimilehin.moviebuff.R;
+import com.example.oluwatimilehin.moviebuff.details.DetailActivity;
 
 import java.util.ArrayList;
 import java.util.Random;

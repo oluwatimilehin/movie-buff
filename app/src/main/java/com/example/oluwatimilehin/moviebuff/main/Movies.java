@@ -1,4 +1,4 @@
-package com.example.oluwatimilehin.moviebuff;
+package com.example.oluwatimilehin.moviebuff.main;
 
 /**
  * Created by Oluwatimilehin on 25/05/2017.
