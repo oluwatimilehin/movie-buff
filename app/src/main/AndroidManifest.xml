@@ -27,6 +27,13 @@
             android:parentActivityName=".main.MovieActivity"
             android:screenOrientation="portrait">
         </activity>
+
+        <provider
+            android:authorities="com.example.oluwatimilehin.moviebuff"
+            android:name=".data.MovieProvider"
+            android:exported="false"
+            android:syncable="true"/>
     </application>
+
 
 </manifest>
