@@ -86,7 +86,28 @@ public class MovieProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        return null;
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        long id;
+        Uri returnUri;
+
+        switch (sUriMatcher.match(uri)){
+            case MOVIES:
+                id = db.insert(MovieContract.FavoritesEntry.TABLE_NAME,null, values );
+                if(id >= 0){
+                    returnUri = MovieContract.FavoritesEntry.buildMovieUri(id);
+                }
+                else{
+                    throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
+                }
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+
+
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return returnUri;
     }
 
     @Override
