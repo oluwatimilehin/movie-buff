@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.example.oluwatimilehin.moviebuff.data.MovieContract.FavoritesEntry;
+
 /**
  * Created by Oluwatimilehin on 05/07/2017.
  * oluwatimilehinadeniran@gmail.com.
@@ -48,7 +50,7 @@ public class MovieProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)){
             case MOVIES:
                 retCursor = db.query(
-                        MovieContract.FavoritesEntry.TABLE_NAME,
+                        FavoritesEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -60,9 +62,9 @@ public class MovieProvider extends ContentProvider {
             case MOVIE_ID:
                 long _id = ContentUris.parseId(uri);
                 retCursor = db.query(
-                        MovieContract.FavoritesEntry.TABLE_NAME,
+                        FavoritesEntry.TABLE_NAME,
                         projection,
-                        MovieContract.FavoritesEntry._ID + "  = ?",
+                        FavoritesEntry._ID + "  = ?",
                         new String[]{String.valueOf(_id)},
                         null,
                         null,
@@ -92,9 +94,9 @@ public class MovieProvider extends ContentProvider {
 
         switch (sUriMatcher.match(uri)){
             case MOVIES:
-                id = db.insert(MovieContract.FavoritesEntry.TABLE_NAME,null, values );
+                id = db.insert(FavoritesEntry.TABLE_NAME,null, values );
                 if(id >= 0){
-                    returnUri = MovieContract.FavoritesEntry.buildMovieUri(id);
+                    returnUri = FavoritesEntry.buildMovieUri(id);
                 }
                 else{
                     throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
@@ -112,7 +114,25 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        int numRows;
+
+        switch (sUriMatcher.match(uri)){
+            case MOVIES:
+                numRows = db.delete(FavoritesEntry.TABLE_NAME, selection,
+                        selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+
+        }
+
+        if(selection == null || numRows != 0){
+            getContext().getContentResolver().notifyChange(uri, null);
+
+        }
+
+        return numRows;
     }
 
     @Override
