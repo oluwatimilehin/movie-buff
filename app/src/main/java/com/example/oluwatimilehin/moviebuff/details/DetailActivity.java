@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.LoaderManager;
@@ -13,6 +14,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,6 +86,29 @@ public class DetailActivity extends AppCompatActivity {
 
         mImageView.setColorFilter(getResources().getColor(R.color.cardview_dark_background),
                 PorterDuff.Mode.MULTIPLY);
+
+        starImage.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View v) {
+                Drawable drawable = starImage.getDrawable().mutate();
+                if(drawable.getColorFilter() != null)
+                Log.d("HEREHERE", drawable.getColorFilter().toString());
+
+                if(drawable.getColorFilter() != null && drawable.getColorFilter().toString()
+                        .equals("android.graphics.PorterDuffColorFilter@db6dbec7")) {
+                    drawable.setColorFilter(getResources().getColor(R.color.textColor), PorterDuff.Mode
+                            .SRC_ATOP);
+                }
+                else{
+                    drawable.setColorFilter(getResources().getColor(R.color.orange_star), PorterDuff.Mode.SRC_ATOP);
+                }
+
+
+            }
+
+        });
+
 
         final String title = callingIntent.getStringExtra("title").toUpperCase();
         final String imagePath = callingIntent.getStringExtra("imageUrl");

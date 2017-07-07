@@ -6,4 +6,5 @@
     <color name="backgroundColor">#0B2027</color>
     <color name="textColor">@android:color/background_light</color>
     <color name="black">#000000</color>
+    <color name="orange_star">#FFD83D</color>
 </resources>
