@@ -13,7 +13,7 @@ import com.example.oluwatimilehin.moviebuff.data.MovieContract.FavoritesEntry;
 
 public class MovieDbHelper extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 10;
+    private static final int DB_VERSION = 11;
     private static final String DB_NAME = "movies.db";
 
     public MovieDbHelper(Context context) {
@@ -37,7 +37,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
              "INTEGER PRIMARY KEY, " + FavoritesEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
                 FavoritesEntry.COLUMN_RATING + " TEXT NOT NULL, " + FavoritesEntry
                 .COLUMN_RELEASE_DATE + " TEXT NOT NULL, " + FavoritesEntry.COLUMN_SYNPOSIS + " " +
-                "TEXT NOT NULL, " + FavoritesEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL," +
+                "TEXT NOT NULL, " + FavoritesEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL UNIQUE," +
                 FavoritesEntry.COLUMN_YOUTUBE_LINK + " TEXT NOT NULL, " + FavoritesEntry
                 .COLUMN_REVIEW + "  TEXT, " + FavoritesEntry.COLUMN_IMAGE + " BLOB)" );
     }

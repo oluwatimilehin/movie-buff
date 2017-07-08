@@ -116,7 +116,18 @@ public class DetailActivity extends MasterActivity {
                 Drawable drawable = starImage.getDrawable().mutate();
 
                 if (drawable.getColorFilter() != null) {
-                    drawable.clearColorFilter();
+                    String selectionClause = FavoritesEntry.COLUMN_TITLE + " = ?";
+                    String[] selectionArgs = {title};
+                    int rowsDeleted;
+
+                    rowsDeleted = getContentResolver().delete(FavoritesEntry.CONTENT_URI,
+                            selectionClause, selectionArgs);
+
+                    if(rowsDeleted > 0)
+                    {
+                        drawable.clearColorFilter();
+                    }
+
                 }  else {
 
                     Uri mUri;

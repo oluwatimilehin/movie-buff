@@ -130,6 +130,7 @@ public class MovieProvider extends ContentProvider {
         }
 
         if(selection == null || numRows != 0){
+            Toast.makeText(getContext(), "Removed from favorites", Toast.LENGTH_SHORT).show();
             getContext().getContentResolver().notifyChange(uri, null);
 
         }
