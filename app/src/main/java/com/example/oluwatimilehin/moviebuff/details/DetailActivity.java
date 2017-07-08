@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -108,12 +109,27 @@ public class DetailActivity extends MasterActivity {
         id = callingIntent.getIntExtra("id", 1);
         fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
 
+        final Drawable drawable = starImage.getDrawable().mutate();
+
+        Cursor cursor = getContentResolver().query(FavoritesEntry.CONTENT_URI,
+                new String[]{FavoritesEntry.COLUMN_MOVIE_ID},
+                FavoritesEntry.COLUMN_MOVIE_ID + "= ?",
+                new String[]{String.valueOf(id)},
+                null,
+                null
+        );
+
+        if(cursor.getCount() > 0){
+            drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(),R
+                    .color.orange_star), PorterDuff.Mode
+                    .SRC_ATOP);
+        }
+        cursor.close();
 
         starImage.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                Drawable drawable = starImage.getDrawable().mutate();
 
                 if (drawable.getColorFilter() != null) {
                     String selectionClause = FavoritesEntry.COLUMN_TITLE + " = ?";

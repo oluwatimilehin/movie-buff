@@ -38,13 +38,13 @@ public class MovieActivity extends MasterActivity {
     ProgressBar mProgressBar;
     ArrayList<Movies> movies = null;
     String query;
+    RecyclerView rv;
+    long currentVisiblePosition = 0;
+    AppBarLayout mAppBarLayout;
     private Toolbar toolbar;
     private TextView toolbarText;
     private Bundle bundle = new Bundle();
     private TextView mErrorTv;
-    RecyclerView rv ;
-    long currentVisiblePosition = 0;
-    AppBarLayout mAppBarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +88,8 @@ public class MovieActivity extends MasterActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(rv.getLayoutManager() != null) {
-            currentVisiblePosition =((GridLayoutManager) rv.getLayoutManager())
+        if (rv.getLayoutManager() != null) {
+            currentVisiblePosition = ((GridLayoutManager) rv.getLayoutManager())
                     .findFirstCompletelyVisibleItemPosition();
         }
     }
@@ -120,7 +120,6 @@ public class MovieActivity extends MasterActivity {
     }
 
 
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -133,14 +132,14 @@ public class MovieActivity extends MasterActivity {
         Drawable overflowIcon = toolbar.getOverflowIcon();
         if (drawable != null && overflowIcon != null) {
             drawable.mutate();
-            drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.textColor ),
+            drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.textColor),
                     PorterDuff
-                    .Mode.SRC_ATOP);
+                            .Mode.SRC_ATOP);
 
             overflowIcon.mutate();
             overflowIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.textColor),
                     PorterDuff.Mode
-                    .SRC_ATOP);
+                            .SRC_ATOP);
         }
 
         return true;
@@ -183,20 +182,19 @@ public class MovieActivity extends MasterActivity {
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
 
-        if(rv.getLayoutManager() != null) {
+        if (rv.getLayoutManager() != null) {
             rv.smoothScrollToPosition((int) currentVisiblePosition);
         }
     }
 
 
-
     /**
      * Method used to install the Calligraphy library
+     *
      * @param newBase
      */
     @Override
@@ -250,7 +248,7 @@ public class MovieActivity extends MasterActivity {
                 showErrorScreen(mErrorTv, mProgressBar);
                 rv.setVisibility(View.INVISIBLE);
             }
-            if(adapter != null) {
+            if (adapter != null) {
                 adapter.setOnItemClickListener(new MovieRVAdapter.ClickListener() {
                     @Override
                     public void onItemClick(int position, View v) {
@@ -261,6 +259,7 @@ public class MovieActivity extends MasterActivity {
                         String plot = currentMovie.getPlot();
                         String releaseDate = currentMovie.getReleaseDate();
                         int id = currentMovie.getId();
+
 
                         Intent callingIntent = new Intent(MovieActivity.this, DetailActivity.class);
 
@@ -276,7 +275,6 @@ public class MovieActivity extends MasterActivity {
                 });
             }
         }
-
 
 
         @Override
