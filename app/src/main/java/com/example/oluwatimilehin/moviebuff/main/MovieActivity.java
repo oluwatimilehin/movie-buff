@@ -168,6 +168,13 @@ public class MovieActivity extends MasterActivity {
                 toolbarText.setText(getString(R.string.popular));
                 restartLoader(query);
                 break;
+            case R.id.favorites:
+                if(toolbarText.getText().equals(R.string.favorites)){
+                    return true;
+                }
+                item.setChecked(true);
+                toolbarText.setText(R.string.favorites);
+                break;
             case R.id.action_refresh:
                 if (toolbarText.getText() == getString(R.string.popular)) {
                     query = "popular";
