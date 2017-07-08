@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.example.oluwatimilehin.moviebuff.data.MovieContract.FavoritesEntry;
 
@@ -97,8 +98,13 @@ public class MovieProvider extends ContentProvider {
                 id = db.insert(FavoritesEntry.TABLE_NAME,null, values );
                 if(id >= 0){
                     returnUri = FavoritesEntry.buildMovieUri(id);
+                    Toast.makeText(getContext(), "Added to favorites.", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    Toast.makeText(getContext(), "Unable to add to favorites. Please try again",
+                            Toast
+                            .LENGTH_SHORT)
+                            .show();
                     throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
                 }
                 break;

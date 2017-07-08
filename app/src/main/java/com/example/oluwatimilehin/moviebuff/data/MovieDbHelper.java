@@ -32,13 +32,15 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     }
 
     private void addMovieTable(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + FavoritesEntry.TABLE_NAME + "(" + FavoritesEntry._ID + " " +
+        String SQLCreateStatement = "CREATE TABLE " + FavoritesEntry.TABLE_NAME + "(" +
+                FavoritesEntry._ID + " " +
                 "INTEGER PRIMARY KEY," + FavoritesEntry.COLUMN_TITLE + "TEXT NOT NULL, " +
                 FavoritesEntry.COLUMN_RATING + " TEXT NOT NULL, " + FavoritesEntry
                 .COLUMN_RELEASE_DATE + " TEXT NOT NULL, " + FavoritesEntry.COLUMN_SYNPOSIS + " " +
                 "TEXT NOT NULL, " + FavoritesEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL," +
                 FavoritesEntry.COLUMN_YOUTUBE_LINK + " TEXT NOT NULL, " + FavoritesEntry
-                .COLUMN_REVIEW + "TEXT, " + FavoritesEntry.COLUMN_IMAGE + " BLOB)" );
+                .COLUMN_REVIEW + "TEXT, " + FavoritesEntry.COLUMN_IMAGE + " BLOB )";
+        db.execSQL(SQLCreateStatement);
     }
 
     private void deleteMovieTable(SQLiteDatabase db){
