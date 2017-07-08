@@ -64,6 +64,8 @@ public class MovieActivity extends MasterActivity {
                         Stetho.defaultInspectorModulesProvider(this))
                 .build();
 
+        Stetho.initializeWithDefaults(this);
+
         mProgressBar = (ProgressBar) findViewById(R.id.pb_indicator);
         mErrorTv = (TextView) findViewById(R.id.error_tv);
 
