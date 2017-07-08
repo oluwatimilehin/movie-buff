@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -13,7 +11,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +20,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.oluwatimilehin.moviebuff.MasterActivity;
 import com.example.oluwatimilehin.moviebuff.R;
 import com.example.oluwatimilehin.moviebuff.details.DetailActivity;
 
@@ -32,10 +30,10 @@ import java.util.Random;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MovieActivity extends AppCompatActivity {
+public class MovieActivity extends MasterActivity {
 
     final static int MOVIE_LOADER_ID = 3;
-    NetworkInfo info;
+
     ProgressBar mProgressBar;
     ArrayList<Movies> movies = null;
     String query;
@@ -174,23 +172,6 @@ public class MovieActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * This method checks for the internet connection status
-     *
-     * @return
-     */
-    public  boolean isConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getApplicationContext()
-                .getSystemService(CONNECTIVITY_SERVICE);
-
-        info = cm.getActiveNetworkInfo();
-        if (info != null && info.isConnectedOrConnecting()) {
-            return true;
-        }
-        return false;
-    }
-
-
 
 
     @Override
@@ -219,18 +200,10 @@ public class MovieActivity extends AppCompatActivity {
         MovieRVAdapter adapter = null;
 
 
-        private void showErrorScreen(){
-            mErrorTv.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.INVISIBLE);
-            rv.setVisibility(View.INVISIBLE);
-            mErrorTv.setText(getString(R.string.internet_error));
-        }
-
         @Override
         public Loader<ArrayList<Movies>> onCreateLoader(int id, final Bundle args) {
             String apiKey = getString(R.string.api_key);
-
-            boolean isConnected = isConnected();
+            boolean isConnected = isConnected(getApplicationContext());
 
             if (isConnected) {
                 mErrorTv.setVisibility(View.INVISIBLE);
@@ -239,7 +212,9 @@ public class MovieActivity extends AppCompatActivity {
 
                 return new MovieLoader(MovieActivity.this, apiKey, args);
             }
-            showErrorScreen();
+
+            showErrorScreen(mErrorTv, mProgressBar);
+            rv.setVisibility(View.INVISIBLE);
             return null;
         }
 
@@ -262,7 +237,8 @@ public class MovieActivity extends AppCompatActivity {
                 rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
                 rv.setAdapter(adapter);
             } else {
-                showErrorScreen();
+                showErrorScreen(mErrorTv, mProgressBar);
+                rv.setVisibility(View.INVISIBLE);
             }
             if(adapter != null) {
                 adapter.setOnItemClickListener(new MovieRVAdapter.ClickListener() {

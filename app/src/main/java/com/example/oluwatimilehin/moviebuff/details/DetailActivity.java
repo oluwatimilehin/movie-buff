@@ -15,7 +15,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +22,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.oluwatimilehin.moviebuff.MasterActivity;
 import com.example.oluwatimilehin.moviebuff.R;
 import com.example.oluwatimilehin.moviebuff.data.MovieContract.FavoritesEntry;
 import com.example.oluwatimilehin.moviebuff.imageutils.BitMapUtils;
@@ -37,7 +38,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.os.Build.VERSION_CODES.M;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends MasterActivity {
 
     private static final int DETAILS_LOADER_ID = 916;
     String fullUrl;
@@ -210,9 +211,10 @@ public class DetailActivity extends AppCompatActivity {
 
             String apiKey = getString(R.string.api_key);
 
-            if (true) {
+            if (isConnected(getApplicationContext())) {
                 return new DetailsLoader(DetailActivity.this, apiKey, args);
             }
+
             return null;
         }
 
@@ -291,10 +293,13 @@ public class DetailActivity extends AppCompatActivity {
                         sharingIntent.putExtra(Intent.EXTRA_TEXT, youtubeLink);
                         sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Youtube link");
                         startActivity(Intent.createChooser(sharingIntent, "Share via"));
-
                         return true;
                     }
                 });
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Please check your internet connection " +
+                        "and try again", Toast.LENGTH_SHORT).show();
             }
         }
 
