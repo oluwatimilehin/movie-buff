@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 
 import com.example.oluwatimilehin.moviebuff.R;
 import com.example.oluwatimilehin.moviebuff.data.MovieContract.FavoritesEntry;
+import com.example.oluwatimilehin.moviebuff.imageutils.BitMapUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -44,6 +46,7 @@ public class DetailActivity extends AppCompatActivity {
     String userRating;
     String plot;
     String releaseDate;
+    String youtubeLink;
     int id;
     ArrayList<Reviews> reviews;
     String review = null;
@@ -106,10 +109,6 @@ public class DetailActivity extends AppCompatActivity {
         fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
 
 
-
-
-        fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
-
         starImage.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -128,14 +127,22 @@ public class DetailActivity extends AppCompatActivity {
                     newValues.put(FavoritesEntry.COLUMN_RELEASE_DATE, releaseDate);
                     newValues.put(FavoritesEntry.COLUMN_TITLE, title);
                     newValues.put(FavoritesEntry.COLUMN_SYNPOSIS, plot);
+                    newValues.put(FavoritesEntry.COLUMN_YOUTUBE_LINK, youtubeLink);
+
+                    byte[] imageByte = BitMapUtils.getBytes(imageBitmap);
+                    newValues.put(FavoritesEntry.COLUMN_IMAGE, imageByte);
 
                     if(review != null)
                     newValues.put(FavoritesEntry.COLUMN_REVIEW, review);
 
-                    drawable.setColorFilter(getResources().getColor(R.color.orange_star), PorterDuff.Mode.SRC_ATOP);
+                    mUri = getContentResolver().insert(FavoritesEntry.CONTENT_URI, newValues);
+
+                    if(mUri != null){
+                        drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(),R
+                                .color.orange_star), PorterDuff.Mode
+                                .SRC_ATOP);
+                    }
                 }
-
-
             }
 
         });
@@ -166,7 +173,9 @@ public class DetailActivity extends AppCompatActivity {
 
         if (upIcon != null) {
             upIcon.mutate();
-            upIcon.setColorFilter(getResources().getColor(R.color.textColor, null), PorterDuff.Mode.SRC_ATOP);
+            upIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.textColor),
+                    PorterDuff
+                    .Mode.SRC_ATOP);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -217,7 +226,7 @@ public class DetailActivity extends AppCompatActivity {
                     review = reviews.get(0).getContent() + " -" + reviews.get(0).getAuthor();
                 }
 
-                final String youtubeLink = "https://www.youtube.com/watch?v=" + youtubeKey;
+                 youtubeLink = "https://www.youtube.com/watch?v=" + youtubeKey;
 
 
                 if (review != null) {
