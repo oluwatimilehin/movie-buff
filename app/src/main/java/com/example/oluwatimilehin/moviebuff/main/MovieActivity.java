@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.example.oluwatimilehin.moviebuff.MasterActivity;
 import com.example.oluwatimilehin.moviebuff.R;
 import com.example.oluwatimilehin.moviebuff.details.DetailActivity;
+import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -55,6 +56,13 @@ public class MovieActivity extends MasterActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+
+        Stetho.newInitializerBuilder(this)
+                .enableDumpapp(
+                        Stetho.defaultDumperPluginsProvider(this))
+                .enableWebKitInspector(
+                        Stetho.defaultInspectorModulesProvider(this))
+                .build();
 
         mProgressBar = (ProgressBar) findViewById(R.id.pb_indicator);
         mErrorTv = (TextView) findViewById(R.id.error_tv);
