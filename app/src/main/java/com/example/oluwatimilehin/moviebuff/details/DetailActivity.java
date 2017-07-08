@@ -22,7 +22,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.oluwatimilehin.moviebuff.MasterActivity;
 import com.example.oluwatimilehin.moviebuff.R;
@@ -214,7 +213,7 @@ public class DetailActivity extends MasterActivity {
             if (isConnected(getApplicationContext())) {
                 return new DetailsLoader(DetailActivity.this, apiKey, args);
             }
-
+            showErrorScreen(errorTV, loadingIndicator);
             return null;
         }
 
@@ -298,8 +297,7 @@ public class DetailActivity extends MasterActivity {
                 });
             }
             else{
-                Toast.makeText(getApplicationContext(), "Please check your internet connection " +
-                        "and try again", Toast.LENGTH_SHORT).show();
+                showErrorScreen(errorTV, loadingIndicator);
             }
         }
 

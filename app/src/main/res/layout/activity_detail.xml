@@ -71,6 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"/>
 
+
                 <TextView
                     android:id="@+id/error_tv"
                     android:layout_width="match_parent"
