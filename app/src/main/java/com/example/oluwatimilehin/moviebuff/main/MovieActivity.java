@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -124,10 +125,13 @@ public class MovieActivity extends AppCompatActivity {
         Drawable overflowIcon = toolbar.getOverflowIcon();
         if (drawable != null && overflowIcon != null) {
             drawable.mutate();
-            drawable.setColorFilter(getResources().getColor(R.color.textColor, null), PorterDuff.Mode.SRC_ATOP);
+            drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.textColor ),
+                    PorterDuff
+                    .Mode.SRC_ATOP);
 
             overflowIcon.mutate();
-            overflowIcon.setColorFilter(getResources().getColor(R.color.textColor, null), PorterDuff.Mode
+            overflowIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.textColor),
+                    PorterDuff.Mode
                     .SRC_ATOP);
         }
 
