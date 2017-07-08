@@ -3,6 +3,7 @@ package com.example.oluwatimilehin.moviebuff.details;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -22,8 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.oluwatimilehin.moviebuff.R;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
@@ -36,6 +37,12 @@ public class DetailActivity extends AppCompatActivity {
 
     private static final int DETAILS_LOADER_ID = 916;
     String fullUrl;
+    String title;
+    String imagePath;
+    String userRating;
+    String plot;
+    String releaseDate;
+    int id;
     ArrayList<Reviews> reviews;
     private Toolbar mToolbar;
     private TextView mToolbarText;
@@ -51,8 +58,8 @@ public class DetailActivity extends AppCompatActivity {
     private ImageView starImage;
     private ImageView playButton;
     private TextView reviewLabel;
-    private Callback mCallback;
     private TextView userReview;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,10 +99,9 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Drawable drawable = starImage.getDrawable().mutate();
 
-                if(drawable.getColorFilter() != null) {
+                if (drawable.getColorFilter() != null) {
                     drawable.clearColorFilter();
-                }
-                else{
+                } else {
                     drawable.setColorFilter(getResources().getColor(R.color.orange_star), PorterDuff.Mode.SRC_ATOP);
                 }
 
@@ -105,39 +111,15 @@ public class DetailActivity extends AppCompatActivity {
         });
 
 
-        final String title = callingIntent.getStringExtra("title").toUpperCase();
-        final String imagePath = callingIntent.getStringExtra("imageUrl");
-        final String userRating = callingIntent.getStringExtra("rating");
-        final String plot = callingIntent.getStringExtra("plot");
-        final String releaseDate = callingIntent.getStringExtra("releaseDate");
-        final int id = callingIntent.getIntExtra("id", 1);
+        title = callingIntent.getStringExtra("title").toUpperCase();
+        imagePath = callingIntent.getStringExtra("imageUrl");
+        userRating = callingIntent.getStringExtra("rating");
+        plot = callingIntent.getStringExtra("plot");
+        releaseDate = callingIntent.getStringExtra("releaseDate");
+        id = callingIntent.getIntExtra("id", 1);
         fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
 
 
-        mCallback = new Callback() {
-            @Override
-            public void onSuccess() {
-                ratingTV.setText(userRating);
-                titleTV.setText(title);
-                releaseDateTV.setText(releaseDate);
-                plotTV.setText(plot);
-                starImage.setVisibility(View.VISIBLE);
-                userRatingStringTV.setVisibility(View.VISIBLE);
-                releaseDateStringTV.setVisibility(View.VISIBLE);
-                loadingIndicator.setVisibility(View.GONE);
-                playButton.setVisibility(View.VISIBLE);
-                if (reviews.size() > 0) {
-                    reviewLabel.setVisibility(View.VISIBLE);
-                }
-                userReview.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onError() {
-                errorTV.setVisibility(View.VISIBLE);
-                loadingIndicator.setVisibility(View.INVISIBLE);
-            }
-        };
 
         Bundle bundle = new Bundle();
         bundle.putInt("id", id);
@@ -217,7 +199,40 @@ public class DetailActivity extends AppCompatActivity {
                     userReview.setText(reviews.get(0).getContent() + " -" + reviews.get(0).getAuthor());
                 }
 
-                Picasso.with(DetailActivity.this).load(fullUrl).into(mImageView, mCallback);
+                Picasso.with(DetailActivity.this)
+                        .load(fullUrl)
+                        .into(new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                mImageView.setImageBitmap(bitmap);
+                                ratingTV.setText(userRating);
+                                titleTV.setText(title);
+                                releaseDateTV.setText(releaseDate);
+                                plotTV.setText(plot);
+                                starImage.setVisibility(View.VISIBLE);
+                                userRatingStringTV.setVisibility(View.VISIBLE);
+                                releaseDateStringTV.setVisibility(View.VISIBLE);
+                                loadingIndicator.setVisibility(View.GONE);
+                                playButton.setVisibility(View.VISIBLE);
+                                if (reviews.size() > 0) {
+                                    reviewLabel.setVisibility(View.VISIBLE);
+                                }
+                                userReview.setVisibility(View.VISIBLE);
+                            }
+
+                            @Override
+                            public void onBitmapFailed(Drawable errorDrawable) {
+                                errorTV.setVisibility(View.VISIBLE);
+                                loadingIndicator.setVisibility(View.INVISIBLE);
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                            }
+                        });
+
+
                 mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
