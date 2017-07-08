@@ -14,7 +14,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -92,13 +91,9 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Drawable drawable = starImage.getDrawable().mutate();
-                if(drawable.getColorFilter() != null)
-                Log.d("HEREHERE", drawable.getColorFilter().toString());
 
-                if(drawable.getColorFilter() != null && drawable.getColorFilter().toString()
-                        .equals("android.graphics.PorterDuffColorFilter@db6dbec7")) {
-                    drawable.setColorFilter(getResources().getColor(R.color.textColor), PorterDuff.Mode
-                            .SRC_ATOP);
+                if(drawable.getColorFilter() != null) {
+                    drawable.clearColorFilter();
                 }
                 else{
                     drawable.setColorFilter(getResources().getColor(R.color.orange_star), PorterDuff.Mode.SRC_ATOP);
