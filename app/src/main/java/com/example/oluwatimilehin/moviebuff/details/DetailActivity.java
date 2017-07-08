@@ -1,6 +1,7 @@
 package com.example.oluwatimilehin.moviebuff.details;
 
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.oluwatimilehin.moviebuff.R;
+import com.example.oluwatimilehin.moviebuff.data.MovieContract.FavoritesEntry;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -44,6 +46,7 @@ public class DetailActivity extends AppCompatActivity {
     String releaseDate;
     int id;
     ArrayList<Reviews> reviews;
+    String review = null;
     private Toolbar mToolbar;
     private TextView mToolbarText;
     private ImageView mImageView;
@@ -59,6 +62,7 @@ public class DetailActivity extends AppCompatActivity {
     private ImageView playButton;
     private TextView reviewLabel;
     private TextView userReview;
+    Bitmap imageBitmap;
 
 
     @Override
@@ -93,24 +97,6 @@ public class DetailActivity extends AppCompatActivity {
         mImageView.setColorFilter(getResources().getColor(R.color.cardview_dark_background),
                 PorterDuff.Mode.MULTIPLY);
 
-        starImage.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = starImage.getDrawable().mutate();
-
-                if (drawable.getColorFilter() != null) {
-                    drawable.clearColorFilter();
-                } else {
-                    drawable.setColorFilter(getResources().getColor(R.color.orange_star), PorterDuff.Mode.SRC_ATOP);
-                }
-
-
-            }
-
-        });
-
-
         title = callingIntent.getStringExtra("title").toUpperCase();
         imagePath = callingIntent.getStringExtra("imageUrl");
         userRating = callingIntent.getStringExtra("rating");
@@ -119,6 +105,40 @@ public class DetailActivity extends AppCompatActivity {
         id = callingIntent.getIntExtra("id", 1);
         fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
 
+
+
+
+        fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
+
+        starImage.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View v) {
+                Drawable drawable = starImage.getDrawable().mutate();
+
+                if (drawable.getColorFilter() != null) {
+                    drawable.clearColorFilter();
+                }  else {
+
+                    Uri mUri;
+
+                    ContentValues newValues = new ContentValues();
+                    newValues.put(FavoritesEntry.COLUMN_MOVIE_ID, id);
+                    newValues.put(FavoritesEntry.COLUMN_RATING, userRating);
+                    newValues.put(FavoritesEntry.COLUMN_RELEASE_DATE, releaseDate);
+                    newValues.put(FavoritesEntry.COLUMN_TITLE, title);
+                    newValues.put(FavoritesEntry.COLUMN_SYNPOSIS, plot);
+
+                    if(review != null)
+                    newValues.put(FavoritesEntry.COLUMN_REVIEW, review);
+
+                    drawable.setColorFilter(getResources().getColor(R.color.orange_star), PorterDuff.Mode.SRC_ATOP);
+                }
+
+
+            }
+
+        });
 
 
         Bundle bundle = new Bundle();
@@ -193,10 +213,15 @@ public class DetailActivity extends AppCompatActivity {
             if (data != null) {
                 final String youtubeKey = data.getString("youtube_key");
                 reviews = data.getParcelableArrayList("reviews");
+                if(reviews.size() > 0) {
+                    review = reviews.get(0).getContent() + " -" + reviews.get(0).getAuthor();
+                }
+
                 final String youtubeLink = "https://www.youtube.com/watch?v=" + youtubeKey;
 
-                if (reviews.size() > 0) {
-                    userReview.setText(reviews.get(0).getContent() + " -" + reviews.get(0).getAuthor());
+
+                if (review != null) {
+                    userReview.setText(review);
                 }
 
                 Picasso.with(DetailActivity.this)
@@ -217,6 +242,7 @@ public class DetailActivity extends AppCompatActivity {
                                 if (reviews.size() > 0) {
                                     reviewLabel.setVisibility(View.VISIBLE);
                                 }
+                                imageBitmap = bitmap;
                                 userReview.setVisibility(View.VISIBLE);
                             }
 
@@ -231,7 +257,6 @@ public class DetailActivity extends AppCompatActivity {
 
                             }
                         });
-
 
                 mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
