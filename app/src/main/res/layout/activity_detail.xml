@@ -172,7 +172,7 @@
                     android:textColor="@color/textColor"
                     fontPath="fonts/Raleway-Italic.ttf"
                     android:textSize="18sp"
-                    android:padding="10dp"
+                    android:padding="20dp"
                     android:lineSpacingExtra="5dp"
                     android:visibility="invisible"/>
 
