@@ -161,7 +161,6 @@
                 android:textColor="@color/textColor"
                 android:textSize="20sp"
                 android:gravity="center"
-                fontPath="fonts/Raleway-LightItalic.ttf"
                 android:visibility="invisible"
                 />
 
