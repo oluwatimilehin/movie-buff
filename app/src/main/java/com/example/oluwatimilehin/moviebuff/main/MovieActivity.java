@@ -17,9 +17,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -52,6 +54,7 @@ public class MovieActivity extends MasterActivity {
     AppBarLayout mAppBarLayout;
     private Toolbar toolbar;
     private TextView toolbarText;
+    LinearLayout layout;
     private Bundle bundle = new Bundle();
     private TextView mErrorTv;
 
@@ -78,6 +81,7 @@ public class MovieActivity extends MasterActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.pb_indicator);
         mErrorTv = (TextView) findViewById(R.id.error_tv);
 
+        layout = (LinearLayout) findViewById(R.id.main_layout);
 
         rv = (RecyclerView) findViewById(R.id.rv_movies);
         rv.setNestedScrollingEnabled(false);
@@ -99,8 +103,11 @@ public class MovieActivity extends MasterActivity {
     protected void onPause() {
         super.onPause();
         if (rv.getLayoutManager() != null) {
-            currentVisiblePosition = ((GridLayoutManager) rv.getLayoutManager())
-                    .findFirstCompletelyVisibleItemPosition();
+
+            if(rv.getLayoutManager() instanceof  GridLayoutManager) {
+                currentVisiblePosition = ((GridLayoutManager) rv.getLayoutManager())
+                        .findFirstCompletelyVisibleItemPosition();
+            }
         }
     }
 
@@ -322,6 +329,7 @@ public class MovieActivity extends MasterActivity {
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             mProgressBar.setVisibility(GONE);
             favoritesAdapter = new FavoritesAdapter(MovieActivity.this, data);
+            layout.setGravity(Gravity.CENTER_HORIZONTAL);
             rv.setLayoutManager(new LinearLayoutManager(MovieActivity.this, LinearLayoutManager
                     .VERTICAL,true ));
 
