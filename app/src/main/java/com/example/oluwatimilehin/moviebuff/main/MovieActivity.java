@@ -2,6 +2,7 @@ package com.example.oluwatimilehin.moviebuff.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -10,8 +11,10 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -20,8 +23,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.oluwatimilehin.moviebuff.FavoritesAdapter;
 import com.example.oluwatimilehin.moviebuff.MasterActivity;
 import com.example.oluwatimilehin.moviebuff.R;
+import com.example.oluwatimilehin.moviebuff.data.MovieContract;
 import com.example.oluwatimilehin.moviebuff.details.DetailActivity;
 import com.facebook.stetho.Stetho;
 
@@ -31,13 +36,17 @@ import java.util.Random;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static android.view.View.GONE;
+
 public class MovieActivity extends MasterActivity {
 
     final static int MOVIE_LOADER_ID = 3;
+    private static final int FAVORITES_LOADER_ID = 258;
 
     ProgressBar mProgressBar;
     ArrayList<Movies> movies = null;
     String query;
+    FavoritesAdapter favoritesAdapter;
     RecyclerView rv;
     long currentVisiblePosition = 0;
     AppBarLayout mAppBarLayout;
@@ -68,6 +77,7 @@ public class MovieActivity extends MasterActivity {
 
         mProgressBar = (ProgressBar) findViewById(R.id.pb_indicator);
         mErrorTv = (TextView) findViewById(R.id.error_tv);
+
 
         rv = (RecyclerView) findViewById(R.id.rv_movies);
         rv.setNestedScrollingEnabled(false);
@@ -169,11 +179,13 @@ public class MovieActivity extends MasterActivity {
                 restartLoader(query);
                 break;
             case R.id.favorites:
-                if(toolbarText.getText().equals(R.string.favorites)){
+                if (toolbarText.getText().equals(R.string.favorites)) {
                     return true;
                 }
                 item.setChecked(true);
                 toolbarText.setText(R.string.favorites);
+                getSupportLoaderManager().initLoader(FAVORITES_LOADER_ID, new Bundle(), new
+                        FavoritesLoader());
                 break;
             case R.id.action_refresh:
                 if (toolbarText.getText() == getString(R.string.popular)) {
@@ -236,7 +248,7 @@ public class MovieActivity extends MasterActivity {
 
         @Override
         public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> data) {
-            mProgressBar.setVisibility(View.GONE);
+            mProgressBar.setVisibility(GONE);
             if (data != null) {
                 if (movies != null) {
                     movies.clear();
@@ -289,6 +301,38 @@ public class MovieActivity extends MasterActivity {
             //super(loader);
         }
 
+    }
+
+    public class FavoritesLoader implements LoaderManager.LoaderCallbacks<Cursor> {
+
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+            mProgressBar.setVisibility(View.VISIBLE);
+            return new CursorLoader(MovieActivity.this,
+                    MovieContract.FavoritesEntry.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null
+            );
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            mProgressBar.setVisibility(GONE);
+            favoritesAdapter = new FavoritesAdapter(MovieActivity.this, data);
+            rv.setLayoutManager(new LinearLayoutManager(MovieActivity.this, LinearLayoutManager
+                    .VERTICAL,true ));
+
+            rv.setAdapter(favoritesAdapter);
+
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
+        }
     }
 }
 
