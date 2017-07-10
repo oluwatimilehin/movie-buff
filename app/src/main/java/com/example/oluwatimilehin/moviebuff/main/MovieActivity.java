@@ -14,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -333,8 +332,7 @@ public class MovieActivity extends MasterActivity {
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             mProgressBar.setVisibility(GONE);
             favoritesAdapter = new FavoritesAdapter(MovieActivity.this, data);
-            rv.setLayoutManager(new LinearLayoutManager(MovieActivity.this, LinearLayoutManager
-                    .VERTICAL,true ));
+            rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
             rv.setAdapter(favoritesAdapter);
 
         }
