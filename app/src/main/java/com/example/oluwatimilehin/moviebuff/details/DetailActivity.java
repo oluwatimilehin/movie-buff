@@ -66,6 +66,7 @@ public class DetailActivity extends MasterActivity {
     private ImageView playButton;
     private TextView reviewLabel;
     private TextView userReview;
+    Target bitmapTarget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +163,40 @@ public class DetailActivity extends MasterActivity {
             }
 
         });
+
+
+        bitmapTarget = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                mImageView.setImageBitmap(bitmap);
+                ratingTV.setText(userRating);
+                titleTV.setText(title);
+                releaseDateTV.setText(releaseDate);
+                plotTV.setText(plot);
+                starImage.setVisibility(View.VISIBLE);
+                userRatingStringTV.setVisibility(View.VISIBLE);
+                releaseDateStringTV.setVisibility(View.VISIBLE);
+                loadingIndicator.setVisibility(View.GONE);
+
+                playButton.setVisibility(View.VISIBLE);
+                if (reviews.size() > 0) {
+                    reviewLabel.setVisibility(View.VISIBLE);
+                }
+                imageBitmap = bitmap;
+                userReview.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+                errorTV.setVisibility(View.VISIBLE);
+                loadingIndicator.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
 
         Bundle bundle = new Bundle();
         bundle.putInt("id", id);
@@ -266,38 +301,7 @@ public class DetailActivity extends MasterActivity {
 
                 Picasso.with(DetailActivity.this)
                         .load(fullUrl)
-                        .into(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                mImageView.setImageBitmap(bitmap);
-                                ratingTV.setText(userRating);
-                                titleTV.setText(title);
-                                releaseDateTV.setText(releaseDate);
-                                plotTV.setText(plot);
-                                starImage.setVisibility(View.VISIBLE);
-                                userRatingStringTV.setVisibility(View.VISIBLE);
-                                releaseDateStringTV.setVisibility(View.VISIBLE);
-                                loadingIndicator.setVisibility(View.GONE);
-
-                                playButton.setVisibility(View.VISIBLE);
-                                if (reviews.size() > 0) {
-                                    reviewLabel.setVisibility(View.VISIBLE);
-                                }
-                                imageBitmap = bitmap;
-                                userReview.setVisibility(View.VISIBLE);
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Drawable errorDrawable) {
-                                errorTV.setVisibility(View.VISIBLE);
-                                loadingIndicator.setVisibility(View.INVISIBLE);
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                            }
-                        });
+                        .into(bitmapTarget);
 
                 mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override

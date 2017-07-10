@@ -162,7 +162,7 @@ public class NetworkUtils extends AppCompatActivity {
         return url;
     }
 
-    private static StringBuffer makeHttRequest(URL url) {
+    private static StringBuffer makeHttpRequest(URL url) {
 
         BufferedReader reader = null;
         HttpURLConnection urlConnection = null;
@@ -172,9 +172,6 @@ public class NetworkUtils extends AppCompatActivity {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
-
-            urlConnection.setConnectTimeout(15000);
-            urlConnection.setReadTimeout(15000);
 
             InputStream inputStream = urlConnection.getInputStream();
 
@@ -221,7 +218,7 @@ public class NetworkUtils extends AppCompatActivity {
      */
     private static String extractResult(URL url) {
 
-        StringBuffer buffer = makeHttRequest(url);
+        StringBuffer buffer = makeHttpRequest(url);
         return buffer != null ? buffer.toString() : null;
     }
 }
