@@ -110,7 +110,11 @@ public class DetailActivity extends MasterActivity {
         drawable = starImage.getDrawable().mutate();
 
 
-        colorStarIfMovieIsInFavorites();
+        if(isInFavorites()){
+            drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(),R
+                    .color.orange_star), PorterDuff.Mode
+                    .SRC_ATOP);
+        }
 
         starImage.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -176,7 +180,7 @@ public class DetailActivity extends MasterActivity {
 
     }
 
-    private void colorStarIfMovieIsInFavorites(){
+    private boolean isInFavorites(){
         Cursor cursor = getContentResolver().query(FavoritesEntry.CONTENT_URI,
                 new String[]{FavoritesEntry.COLUMN_MOVIE_ID},
                 FavoritesEntry.COLUMN_MOVIE_ID + "= ?",
@@ -186,11 +190,10 @@ public class DetailActivity extends MasterActivity {
         );
 
         if(cursor.getCount() > 0){
-            drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(),R
-                    .color.orange_star), PorterDuff.Mode
-                    .SRC_ATOP);
+            cursor.close();
+            return true;
         }
-        cursor.close();
+        return false;
     }
 
     @Override
@@ -275,6 +278,7 @@ public class DetailActivity extends MasterActivity {
                                 userRatingStringTV.setVisibility(View.VISIBLE);
                                 releaseDateStringTV.setVisibility(View.VISIBLE);
                                 loadingIndicator.setVisibility(View.GONE);
+
                                 playButton.setVisibility(View.VISIBLE);
                                 if (reviews.size() > 0) {
                                     reviewLabel.setVisibility(View.VISIBLE);
