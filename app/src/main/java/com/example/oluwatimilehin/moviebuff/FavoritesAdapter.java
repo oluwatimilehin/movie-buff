@@ -31,7 +31,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         mCursorAdapter = new CursorAdapter(context, c, 0) {
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
-                return LayoutInflater.from(context).inflate(R.layout.grid_item, parent, false);
+                return LayoutInflater.from(context).inflate(R.layout.favorites_item, parent, false);
             }
 
             @Override
