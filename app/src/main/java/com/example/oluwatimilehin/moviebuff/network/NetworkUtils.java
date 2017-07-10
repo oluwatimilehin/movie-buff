@@ -173,6 +173,9 @@ public class NetworkUtils extends AppCompatActivity {
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
+            urlConnection.setConnectTimeout(15000);
+            urlConnection.setReadTimeout(15000);
+
             InputStream inputStream = urlConnection.getInputStream();
 
             if (inputStream == null) {
@@ -191,7 +194,7 @@ public class NetworkUtils extends AppCompatActivity {
             }
 
 
-        } catch (IOException e) {
+        } catch (IOException e ) {
             e.printStackTrace();
             return null;
         } finally {
