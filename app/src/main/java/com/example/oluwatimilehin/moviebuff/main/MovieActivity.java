@@ -328,7 +328,7 @@ public class MovieActivity extends MasterActivity {
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
             if (mErrorTv.getVisibility() == View.VISIBLE) {
-                mErrorTv.setVisibility(GONE);
+                mErrorTv.setVisibility(View.INVISIBLE);
                 rv.setVisibility(View.VISIBLE);
             }
 
@@ -346,11 +346,18 @@ public class MovieActivity extends MasterActivity {
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             mProgressBar.setVisibility(GONE);
 
-            if (data != null) {
+            if (data.getCount() > 0) {
+                mErrorTv.setVisibility(GONE);
                 favoritesAdapter = new FavoritesAdapter(MovieActivity.this, data);
                 rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
                 rv.setAdapter(favoritesAdapter);
+                return;
             }
+
+            rv.setVisibility(GONE);
+            mErrorTv.setText(getString(R.string.favorites_error));
+            mErrorTv.setVisibility(View.VISIBLE);
+
         }
 
         @Override
