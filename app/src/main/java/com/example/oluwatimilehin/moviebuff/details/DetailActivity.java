@@ -36,8 +36,6 @@ import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static android.os.Build.VERSION_CODES.M;
-
 public class DetailActivity extends MasterActivity {
 
     private static final int DETAILS_LOADER_ID = 916;
@@ -51,6 +49,8 @@ public class DetailActivity extends MasterActivity {
     int id;
     ArrayList<Reviews> reviews;
     String review = null;
+    Bitmap imageBitmap;
+    Drawable drawable;
     private Toolbar mToolbar;
     private TextView mToolbarText;
     private ImageView mImageView;
@@ -66,8 +66,6 @@ public class DetailActivity extends MasterActivity {
     private ImageView playButton;
     private TextView reviewLabel;
     private TextView userReview;
-    Bitmap imageBitmap;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,28 +107,16 @@ public class DetailActivity extends MasterActivity {
         id = callingIntent.getIntExtra("id", 1);
         fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
 
-        final Drawable drawable = starImage.getDrawable().mutate();
+        drawable = starImage.getDrawable().mutate();
 
-        Cursor cursor = getContentResolver().query(FavoritesEntry.CONTENT_URI,
-                new String[]{FavoritesEntry.COLUMN_MOVIE_ID},
-                FavoritesEntry.COLUMN_MOVIE_ID + "= ?",
-                new String[]{String.valueOf(id)},
-                null,
-                null
-        );
-
-        if(cursor.getCount() > 0){
-            drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(),R
-                    .color.orange_star), PorterDuff.Mode
-                    .SRC_ATOP);
-        }
-        cursor.close();
+        // Check if the selected movie has been added to favorites
+        colorStarIfMovieIsInFavorites();
 
         starImage.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-
+                //If movie has been added to favorites, delete it.
                 if (drawable.getColorFilter() != null) {
                     String selectionClause = FavoritesEntry.COLUMN_TITLE + " = ?";
                     String[] selectionArgs = {title};
@@ -138,13 +124,12 @@ public class DetailActivity extends MasterActivity {
 
                     rowsDeleted = getContentResolver().delete(FavoritesEntry.CONTENT_URI,
                             selectionClause, selectionArgs);
-
                     if(rowsDeleted > 0)
                     {
                         drawable.clearColorFilter();
                     }
 
-                }  else {
+                }  else { //Insert into favorites table
 
                     Uri mUri;
 
@@ -192,7 +177,23 @@ public class DetailActivity extends MasterActivity {
 
     }
 
-    @RequiresApi(api = M)
+    private void colorStarIfMovieIsInFavorites(){
+        Cursor cursor = getContentResolver().query(FavoritesEntry.CONTENT_URI,
+                new String[]{FavoritesEntry.COLUMN_MOVIE_ID},
+                FavoritesEntry.COLUMN_MOVIE_ID + "= ?",
+                new String[]{String.valueOf(id)},
+                null,
+                null
+        );
+
+        if(cursor.getCount() > 0){
+            drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(),R
+                    .color.orange_star), PorterDuff.Mode
+                    .SRC_ATOP);
+        }
+        cursor.close();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -298,6 +299,7 @@ public class DetailActivity extends MasterActivity {
                 mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //Add youtube intent
                         Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd" +
                                 ".youtube:" + youtubeKey));
                         Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink));
@@ -310,10 +312,10 @@ public class DetailActivity extends MasterActivity {
                     }
                 });
 
+                //Longclick listener to share youtube link
                 mImageView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-
                         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                         sharingIntent.setType("text/plain");
                         sharingIntent.putExtra(Intent.EXTRA_TEXT, youtubeLink);
@@ -330,7 +332,6 @@ public class DetailActivity extends MasterActivity {
 
         @Override
         public void onLoaderReset(Loader<Bundle> loader) {
-
         }
     }
 }
