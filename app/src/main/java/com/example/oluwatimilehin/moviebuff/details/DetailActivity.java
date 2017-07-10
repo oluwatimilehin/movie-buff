@@ -109,7 +109,7 @@ public class DetailActivity extends MasterActivity {
 
         drawable = starImage.getDrawable().mutate();
 
-        // Check if the selected movie has been added to favorites
+
         colorStarIfMovieIsInFavorites();
 
         starImage.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +158,6 @@ public class DetailActivity extends MasterActivity {
             }
 
         });
-
 
         Bundle bundle = new Bundle();
         bundle.putInt("id", id);

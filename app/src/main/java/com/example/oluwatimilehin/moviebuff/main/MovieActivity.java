@@ -309,6 +309,10 @@ public class MovieActivity extends MasterActivity {
 
     }
 
+    /**
+     * Seperate loader for database data
+     */
+
     public class FavoritesLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 
         @Override
