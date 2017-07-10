@@ -50,9 +50,9 @@ public class MovieActivity extends MasterActivity {
     RecyclerView rv;
     long currentVisiblePosition = 0;
     AppBarLayout mAppBarLayout;
+    LinearLayout layout;
     private Toolbar toolbar;
     private TextView toolbarText;
-    LinearLayout layout;
     private Bundle bundle = new Bundle();
     private TextView mErrorTv;
 
@@ -102,7 +102,7 @@ public class MovieActivity extends MasterActivity {
         super.onPause();
         if (rv.getLayoutManager() != null) {
 
-            if(rv.getLayoutManager() instanceof  GridLayoutManager) {
+            if (rv.getLayoutManager() instanceof GridLayoutManager) {
                 currentVisiblePosition = ((GridLayoutManager) rv.getLayoutManager())
                         .findFirstCompletelyVisibleItemPosition();
             }
@@ -184,14 +184,13 @@ public class MovieActivity extends MasterActivity {
                 restartLoader(query);
                 break;
             case R.id.favorites:
-                if (toolbarText.getText().equals(R.string.favorites)) {
+                if (toolbarText.getText().equals(getString(R.string.favorites))) {
                     return true;
                 }
                 item.setChecked(true);
                 toolbarText.setText(R.string.favorites);
-                getSupportLoaderManager().initLoader(FAVORITES_LOADER_ID, new Bundle(), new
-                        FavoritesLoader());
                 getSupportLoaderManager().destroyLoader(MOVIE_LOADER_ID);
+                startFavoritesLoader();
                 break;
             case R.id.action_refresh:
                 if (toolbarText.getText() == getString(R.string.popular)) {
@@ -216,6 +215,16 @@ public class MovieActivity extends MasterActivity {
         }
     }
 
+    private void startFavoritesLoader() {
+        if (getSupportLoaderManager().getLoader(FAVORITES_LOADER_ID) != null) {
+            getSupportLoaderManager().restartLoader(FAVORITES_LOADER_ID, new Bundle(),
+                    new FavoritesLoader());
+            return;
+        }
+        getSupportLoaderManager().initLoader(FAVORITES_LOADER_ID, new Bundle(), new
+                FavoritesLoader());
+
+    }
 
     /**
      * Method used to install the Calligraphy library
@@ -318,6 +327,11 @@ public class MovieActivity extends MasterActivity {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+            if (mErrorTv.getVisibility() == View.VISIBLE) {
+                mErrorTv.setVisibility(GONE);
+                rv.setVisibility(View.VISIBLE);
+            }
+
             mProgressBar.setVisibility(View.VISIBLE);
             return new CursorLoader(MovieActivity.this,
                     MovieContract.FavoritesEntry.CONTENT_URI,
@@ -331,10 +345,12 @@ public class MovieActivity extends MasterActivity {
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             mProgressBar.setVisibility(GONE);
-            favoritesAdapter = new FavoritesAdapter(MovieActivity.this, data);
-            rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
-            rv.setAdapter(favoritesAdapter);
 
+            if (data != null) {
+                favoritesAdapter = new FavoritesAdapter(MovieActivity.this, data);
+                rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
+                rv.setAdapter(favoritesAdapter);
+            }
         }
 
         @Override
