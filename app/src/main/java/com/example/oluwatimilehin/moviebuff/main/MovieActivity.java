@@ -192,6 +192,7 @@ public class MovieActivity extends MasterActivity {
                 toolbarText.setText(R.string.favorites);
                 getSupportLoaderManager().initLoader(FAVORITES_LOADER_ID, new Bundle(), new
                         FavoritesLoader());
+                getSupportLoaderManager().destroyLoader(MOVIE_LOADER_ID);
                 break;
             case R.id.action_refresh:
                 if (toolbarText.getText() == getString(R.string.popular)) {
