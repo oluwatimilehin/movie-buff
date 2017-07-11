@@ -21,6 +21,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -66,6 +67,7 @@ public class DetailActivity extends MasterActivity {
     private ImageView playButton;
     private TextView reviewLabel;
     private TextView userReview;
+    private Button readMoreButton;
     Target bitmapTarget;
 
     @Override
@@ -95,6 +97,7 @@ public class DetailActivity extends MasterActivity {
         starImage = (ImageView) findViewById(R.id.star);
         playButton = (ImageView) findViewById(R.id.play_button);
         reviewLabel = (TextView) findViewById(R.id.user_reviews_label);
+        readMoreButton = (Button) findViewById(R.id.read_more_btn);
 
 
         Intent callingIntent = getIntent();
@@ -184,6 +187,11 @@ public class DetailActivity extends MasterActivity {
                 if (reviews.size() > 0) {
                     reviewLabel.setVisibility(View.VISIBLE);
                 }
+
+                if(userReview.getLineCount() > userReview.getMaxLines()){
+                    readMoreButton.setVisibility(View.VISIBLE);
+                }
+
                 imageBitmap = bitmap;
                 userReview.setVisibility(View.VISIBLE);
             }
