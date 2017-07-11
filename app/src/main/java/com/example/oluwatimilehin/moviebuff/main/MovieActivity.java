@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.oluwatimilehin.moviebuff.Constants;
 import com.example.oluwatimilehin.moviebuff.favorites.FavoritesAdapter;
 import com.example.oluwatimilehin.moviebuff.MasterActivity;
 import com.example.oluwatimilehin.moviebuff.R;
@@ -297,12 +298,12 @@ public class MovieActivity extends MasterActivity {
 
                         Intent callingIntent = new Intent(MovieActivity.this, DetailActivity.class);
 
-                        callingIntent.putExtra("title", title);
-                        callingIntent.putExtra("imageUrl", imageUrl);
-                        callingIntent.putExtra("rating", rating);
-                        callingIntent.putExtra("plot", plot);
-                        callingIntent.putExtra("releaseDate", releaseDate);
-                        callingIntent.putExtra("id", id);
+                        callingIntent.putExtra(Constants.KEY_TITLE, title);
+                        callingIntent.putExtra(Constants.KEY_IMAGE_URL, imageUrl);
+                        callingIntent.putExtra(Constants.KEY_RATING, rating);
+                        callingIntent.putExtra(Constants.KEY_PLOT, plot);
+                        callingIntent.putExtra(Constants.KEY_RELEASE_DATE, releaseDate);
+                        callingIntent.putExtra(Constants.KEY_ID, id);
 
                         startActivity(callingIntent);
                     }
