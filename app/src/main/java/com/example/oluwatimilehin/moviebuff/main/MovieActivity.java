@@ -358,7 +358,7 @@ public class MovieActivity extends MasterActivity {
                     @Override
                     public void onItemClick(int position, View v) {
 
-                        if(data.moveToPosition(position)) {
+                        if (data.moveToPosition(position)) {
 
                             int titleIndex = data.getColumnIndex(FavoritesEntry
                                     .COLUMN_TITLE);
@@ -387,10 +387,10 @@ public class MovieActivity extends MasterActivity {
                             intent.putExtra(Constants.KEY_TITLE, title);
                             intent.putExtra(Constants.KEY_RATING, rating);
 
-                            if(review != null )
-                            intent.putExtra(Constants.KEY_REVIEW, review);
+                            if (review != null)
+                                intent.putExtra(Constants.KEY_REVIEW, review);
 
-                     //       intent.putExtra(Constants.KEY_IMAGE_BYTES, image);
+                            //       intent.putExtra(Constants.KEY_IMAGE_BYTES, image);
                             intent.putExtra(Constants.KEY_YOUTUBE_LINK, youtubeLink);
                             intent.putExtra(Constants.KEY_RELEASE_DATE, releaseDate);
                             intent.putExtra(Constants.KEY_PLOT, plot);
