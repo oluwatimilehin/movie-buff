@@ -22,8 +22,9 @@ import static com.example.oluwatimilehin.moviebuff.data.MovieContract.FavoritesE
 
 public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder> {
 
-    CursorAdapter mCursorAdapter;
-    Context mContext;
+    private CursorAdapter mCursorAdapter;
+    private Context mContext;
+    private static ClickListener sClickListener;
 
     public FavoritesAdapter(Context context, Cursor c) {
         mContext = context;
@@ -79,11 +80,27 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         return mCursorAdapter.getCount();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public ViewHolder(View itemView) {
+
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            sClickListener.onItemClick(getAdapterPosition(), v);
         }
     }
+
+    public void setOnItemClickListener(ClickListener listener){
+        FavoritesAdapter.sClickListener = listener;
+    }
+
+    public interface ClickListener{
+        void onItemClick(int position, View v);
+    }
+
 
 
 }

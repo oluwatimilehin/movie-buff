@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.example.oluwatimilehin.moviebuff.FavoritesAdapter;
 import com.example.oluwatimilehin.moviebuff.MasterActivity;
 import com.example.oluwatimilehin.moviebuff.R;
-import com.example.oluwatimilehin.moviebuff.data.MovieContract;
+import com.example.oluwatimilehin.moviebuff.data.MovieContract.FavoritesEntry;
 import com.example.oluwatimilehin.moviebuff.details.DetailActivity;
 import com.facebook.stetho.Stetho;
 
@@ -334,7 +334,7 @@ public class MovieActivity extends MasterActivity {
 
             mProgressBar.setVisibility(View.VISIBLE);
             return new CursorLoader(MovieActivity.this,
-                    MovieContract.FavoritesEntry.CONTENT_URI,
+                    FavoritesEntry.CONTENT_URI,
                     null,
                     null,
                     null,
@@ -343,7 +343,7 @@ public class MovieActivity extends MasterActivity {
         }
 
         @Override
-        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
             mProgressBar.setVisibility(GONE);
 
             if (data.getCount() > 0) {
@@ -351,6 +351,42 @@ public class MovieActivity extends MasterActivity {
                 favoritesAdapter = new FavoritesAdapter(MovieActivity.this, data);
                 rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
                 rv.setAdapter(favoritesAdapter);
+
+
+                favoritesAdapter.setOnItemClickListener(new FavoritesAdapter.ClickListener() {
+                    @Override
+                    public void onItemClick(int position, View v) {
+
+                        if(data.moveToPosition(position)) {
+
+                            int titleIndex = data.getColumnIndex(FavoritesEntry
+                                    .COLUMN_TITLE);
+                            int ratingIndex = data.getColumnIndex(FavoritesEntry.COLUMN_RATING);
+                            int reviewIndex = data.getColumnIndex(FavoritesEntry.COLUMN_REVIEW);
+                            int imageIndex = data.getColumnIndex(FavoritesEntry.COLUMN_IMAGE);
+                            int youtubeIndex = data.getColumnIndex(FavoritesEntry
+                                    .COLUMN_YOUTUBE_LINK);
+                            int releaseDateIndex = data.getColumnIndex(FavoritesEntry
+                                    .COLUMN_RELEASE_DATE);
+                            int plotIndex = data.getColumnIndex(FavoritesEntry.COLUMN_SYNPOSIS);
+
+
+                            String title = data.getString(titleIndex);
+                            String rating = data.getString(ratingIndex);
+                            String review = data.getString(reviewIndex);
+                            byte[] image = data.getBlob(imageIndex);
+                            String youtubeLink = data.getString(youtubeIndex);
+                            String releaseDate = data.getString(releaseDateIndex);
+                            String plot = data.getString(plotIndex);
+
+                            Intent intent = new Intent(MovieActivity.this, DetailActivity.class);
+
+                            intent.putExtra("");
+                        }
+
+                    }
+                });
+
                 return;
             }
 

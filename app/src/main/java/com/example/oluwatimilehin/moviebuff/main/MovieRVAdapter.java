@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class MovieRVAdapter extends RecyclerView.Adapter<MovieRVAdapter.MovieViewHolder> {
 
-    ArrayList<Movies> mMovies = new ArrayList<Movies>();
+    private ArrayList<Movies> mMovies = new ArrayList<Movies>();
     private static ClickListener clickListener;
 
     public MovieRVAdapter(ArrayList<Movies> movies){

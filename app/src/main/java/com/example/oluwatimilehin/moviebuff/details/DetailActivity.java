@@ -188,9 +188,9 @@ public class DetailActivity extends MasterActivity {
                     reviewLabel.setVisibility(View.VISIBLE);
                 }
 
-                if(userReview.getLineCount() > userReview.getMaxLines()){
-                    readMoreButton.setVisibility(View.VISIBLE);
-                }
+//                if(userReview.getLineCount() > userReview.getMaxLines()){
+//                    readMoreButton.setVisibility(View.VISIBLE);
+//                }
 
                 imageBitmap = bitmap;
                 userReview.setVisibility(View.VISIBLE);
