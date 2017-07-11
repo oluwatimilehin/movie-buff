@@ -1,4 +1,4 @@
-package com.example.oluwatimilehin.moviebuff;
+package com.example.oluwatimilehin.moviebuff.favorites;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,6 +11,7 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.oluwatimilehin.moviebuff.R;
 import com.example.oluwatimilehin.moviebuff.imageutils.BitMapUtils;
 
 import static com.example.oluwatimilehin.moviebuff.data.MovieContract.FavoritesEntry;

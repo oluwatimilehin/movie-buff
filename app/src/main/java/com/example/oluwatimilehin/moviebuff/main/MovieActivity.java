@@ -23,7 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.oluwatimilehin.moviebuff.FavoritesAdapter;
+import com.example.oluwatimilehin.moviebuff.favorites.FavoritesAdapter;
 import com.example.oluwatimilehin.moviebuff.MasterActivity;
 import com.example.oluwatimilehin.moviebuff.R;
 import com.example.oluwatimilehin.moviebuff.data.MovieContract.FavoritesEntry;
@@ -381,7 +381,7 @@ public class MovieActivity extends MasterActivity {
 
                             Intent intent = new Intent(MovieActivity.this, DetailActivity.class);
 
-                            intent.putExtra("");
+                           // intent.putExtra("");
                         }
 
                     }
