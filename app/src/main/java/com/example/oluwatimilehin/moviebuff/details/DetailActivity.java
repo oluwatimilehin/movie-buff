@@ -55,6 +55,7 @@ public class DetailActivity extends MasterActivity {
     String review = null;
     Bitmap imageBitmap;
     Drawable drawable;
+    Target bitmapTarget;
     private Toolbar mToolbar;
     private TextView mToolbarText;
     private ImageView mImageView;
@@ -71,7 +72,6 @@ public class DetailActivity extends MasterActivity {
     private TextView reviewLabel;
     private TextView userReview;
     private Button readMoreButton;
-    Target bitmapTarget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,8 +123,7 @@ public class DetailActivity extends MasterActivity {
             }
 
             loadViews();
-        }
-        else{
+        } else {
             imagePath = callingIntent.getStringExtra(Constants.KEY_IMAGE_URL);
             fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
         }
@@ -227,7 +226,7 @@ public class DetailActivity extends MasterActivity {
         loadingIndicator.setVisibility(View.GONE);
 
         playButton.setVisibility(View.VISIBLE);
-        if (reviews != null|| review  != null) {
+        if (reviews != null || review != null) {
             reviewLabel.setVisibility(View.VISIBLE);
         }
 
