@@ -33,7 +33,6 @@ import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class DetailActivity extends MasterActivity {
@@ -207,11 +206,11 @@ public class DetailActivity extends MasterActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/Raleway-Light.ttf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
+//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+//                .setDefaultFontPath("fonts/Raleway-Light.ttf")
+//                .setFontAttrId(R.attr.fontPath)
+//                .build()
+//        );
 
     }
 
@@ -263,10 +262,10 @@ public class DetailActivity extends MasterActivity {
      *
      * @param newBase
      */
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
+//    @Override
+//    protected void attachBaseContext(Context newBase) {
+//        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+//    }
 
     public class DetailsDataLoader implements LoaderManager.LoaderCallbacks<Bundle> {
 
