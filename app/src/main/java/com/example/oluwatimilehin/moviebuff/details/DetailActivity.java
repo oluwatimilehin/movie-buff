@@ -38,6 +38,8 @@ import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.example.oluwatimilehin.moviebuff.Constants.KEY_IMAGE_BYTES;
+
 public class DetailActivity extends MasterActivity {
 
     private static final int DETAILS_LOADER_ID = 916;
@@ -112,10 +114,9 @@ public class DetailActivity extends MasterActivity {
         id = callingIntent.getIntExtra("id", 1);
 
         if (callingIntent.hasExtra(Constants.KEY_YOUTUBE_LINK)) {
-
             youtubeLink = callingIntent.getStringExtra(Constants.KEY_YOUTUBE_LINK);
-            imageBitmap = BitMapUtils.getImage(callingIntent.getByteArrayExtra(Constants
-                    .KEY_IMAGE_BYTES));
+//            imageBitmap = BitMapUtils.getImage(callingIntent.getByteArrayExtra(Constants
+//                    .KEY_IMAGE_BYTES));
 
             if (callingIntent.hasExtra(Constants.KEY_REVIEW)) {
                 review = callingIntent.getStringExtra(Constants.KEY_REVIEW);
@@ -125,13 +126,10 @@ public class DetailActivity extends MasterActivity {
         }
         else{
             imagePath = callingIntent.getStringExtra(Constants.KEY_IMAGE_URL);
+            fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
         }
 
-
-        fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
-
         drawable = starImage.getDrawable().mutate();
-
 
         if (isInFavorites()) {
             drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(), R
@@ -207,7 +205,7 @@ public class DetailActivity extends MasterActivity {
         };
 
         //Start the loader only if the movie is not in the database
-        if (!callingIntent.hasExtra(Constants.KEY_IMAGE_BYTES)) {
+        if (!callingIntent.hasExtra(KEY_IMAGE_BYTES)) {
 
             Bundle bundle = new Bundle();
             bundle.putInt("id", id);
@@ -229,13 +227,13 @@ public class DetailActivity extends MasterActivity {
         loadingIndicator.setVisibility(View.GONE);
 
         playButton.setVisibility(View.VISIBLE);
-        if (reviews.size() > 0 || review  != null) {
+        if (reviews != null|| review  != null) {
             reviewLabel.setVisibility(View.VISIBLE);
         }
 
-//                if(userReview.getLineCount() > userReview.getMaxLines()){
-//                    readMoreButton.setVisibility(View.VISIBLE);
-//                }
+        if (userReview.getLineCount() > userReview.getMaxLines()) {
+            readMoreButton.setVisibility(View.VISIBLE);
+        }
 
         userReview.setVisibility(View.VISIBLE);
     }

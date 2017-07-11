@@ -390,7 +390,7 @@ public class MovieActivity extends MasterActivity {
                             if(review != null )
                             intent.putExtra(Constants.KEY_REVIEW, review);
 
-                            intent.putExtra(Constants.KEY_IMAGE_BYTES, image);
+                     //       intent.putExtra(Constants.KEY_IMAGE_BYTES, image);
                             intent.putExtra(Constants.KEY_YOUTUBE_LINK, youtubeLink);
                             intent.putExtra(Constants.KEY_RELEASE_DATE, releaseDate);
                             intent.putExtra(Constants.KEY_PLOT, plot);
