@@ -172,7 +172,6 @@
                     android:layout_height="wrap_content"
                     tools:text="@string/review_placeholder"
                     android:textColor="@color/textColor"
-                    android:textIsSelectable="true"
                     android:textSize="18sp"
                     android:padding="10dp"
                     android:lineSpacingExtra="5dp"
