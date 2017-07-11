@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.oluwatimilehin.moviebuff.Constants;
 import com.example.oluwatimilehin.moviebuff.MasterActivity;
 import com.example.oluwatimilehin.moviebuff.R;
 import com.example.oluwatimilehin.moviebuff.data.MovieContract.FavoritesEntry;
@@ -80,7 +81,7 @@ public class DetailActivity extends MasterActivity {
         setSupportActionBar(mToolbar);
         mToolbarText.setText(R.string.movie_detail);
         mToolbarText.setGravity(Gravity.NO_GRAVITY);
-        mToolbarText.setPadding(200, 0, 0 , 0);
+        mToolbarText.setPadding(200, 0, 0, 0);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -99,25 +100,41 @@ public class DetailActivity extends MasterActivity {
         reviewLabel = (TextView) findViewById(R.id.user_reviews_label);
         readMoreButton = (Button) findViewById(R.id.read_more_btn);
 
-
         Intent callingIntent = getIntent();
 
         mImageView.setColorFilter(getResources().getColor(R.color.cardview_dark_background),
                 PorterDuff.Mode.MULTIPLY);
 
-        title = callingIntent.getStringExtra("title").toUpperCase();
-        imagePath = callingIntent.getStringExtra("imageUrl");
-        userRating = callingIntent.getStringExtra("rating");
-        plot = callingIntent.getStringExtra("plot");
-        releaseDate = callingIntent.getStringExtra("releaseDate");
+        title = callingIntent.getStringExtra(Constants.KEY_TITLE).toUpperCase();
+        userRating = callingIntent.getStringExtra(Constants.KEY_RATING);
+        plot = callingIntent.getStringExtra(Constants.KEY_PLOT);
+        releaseDate = callingIntent.getStringExtra(Constants.KEY_RELEASE_DATE);
         id = callingIntent.getIntExtra("id", 1);
+
+        if (callingIntent.hasExtra(Constants.KEY_YOUTUBE_LINK)) {
+
+            youtubeLink = callingIntent.getStringExtra(Constants.KEY_YOUTUBE_LINK);
+            imageBitmap = BitMapUtils.getImage(callingIntent.getByteArrayExtra(Constants
+                    .KEY_IMAGE_BYTES));
+
+            if (callingIntent.hasExtra(Constants.KEY_REVIEW)) {
+                review = callingIntent.getStringExtra(Constants.KEY_REVIEW);
+            }
+
+            loadViews();
+        }
+        else{
+            imagePath = callingIntent.getStringExtra(Constants.KEY_IMAGE_URL);
+        }
+
+
         fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
 
         drawable = starImage.getDrawable().mutate();
 
 
-        if(isInFavorites()){
-            drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(),R
+        if (isInFavorites()) {
+            drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(), R
                     .color.orange_star), PorterDuff.Mode
                     .SRC_ATOP);
         }
@@ -134,12 +151,11 @@ public class DetailActivity extends MasterActivity {
 
                     rowsDeleted = getContentResolver().delete(FavoritesEntry.CONTENT_URI,
                             selectionClause, selectionArgs);
-                    if(rowsDeleted > 0)
-                    {
+                    if (rowsDeleted > 0) {
                         drawable.clearColorFilter();
                     }
 
-                }  else { //Insert into favorites table
+                } else { //Insert into favorites table
 
                     Uri mUri;
 
@@ -154,13 +170,13 @@ public class DetailActivity extends MasterActivity {
                     byte[] imageByte = BitMapUtils.getBytes(imageBitmap);
                     newValues.put(FavoritesEntry.COLUMN_IMAGE, imageByte);
 
-                    if(review != null)
-                    newValues.put(FavoritesEntry.COLUMN_REVIEW, review);
+                    if (review != null)
+                        newValues.put(FavoritesEntry.COLUMN_REVIEW, review);
 
                     mUri = getContentResolver().insert(FavoritesEntry.CONTENT_URI, newValues);
 
-                    if(mUri != null){
-                        drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(),R
+                    if (mUri != null) {
+                        drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(), R
                                 .color.orange_star), PorterDuff.Mode
                                 .SRC_ATOP);
                     }
@@ -174,26 +190,8 @@ public class DetailActivity extends MasterActivity {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 mImageView.setImageBitmap(bitmap);
-                ratingTV.setText(userRating);
-                titleTV.setText(title);
-                releaseDateTV.setText(releaseDate);
-                plotTV.setText(plot);
-                starImage.setVisibility(View.VISIBLE);
-                userRatingStringTV.setVisibility(View.VISIBLE);
-                releaseDateStringTV.setVisibility(View.VISIBLE);
-                loadingIndicator.setVisibility(View.GONE);
-
-                playButton.setVisibility(View.VISIBLE);
-                if (reviews.size() > 0) {
-                    reviewLabel.setVisibility(View.VISIBLE);
-                }
-
-//                if(userReview.getLineCount() > userReview.getMaxLines()){
-//                    readMoreButton.setVisibility(View.VISIBLE);
-//                }
-
                 imageBitmap = bitmap;
-                userReview.setVisibility(View.VISIBLE);
+                loadViews();
             }
 
             @Override
@@ -208,10 +206,38 @@ public class DetailActivity extends MasterActivity {
             }
         };
 
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", id);
-        getSupportLoaderManager().initLoader(DETAILS_LOADER_ID, bundle, new DetailsDataLoader());
+        //Start the loader only if the movie is not in the database
+        if (!callingIntent.hasExtra(Constants.KEY_IMAGE_BYTES)) {
 
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", id);
+            getSupportLoaderManager().initLoader(DETAILS_LOADER_ID, bundle, new DetailsDataLoader());
+        }
+
+    }
+
+
+    private void loadViews() {
+
+        ratingTV.setText(userRating);
+        titleTV.setText(title);
+        releaseDateTV.setText(releaseDate);
+        plotTV.setText(plot);
+        starImage.setVisibility(View.VISIBLE);
+        userRatingStringTV.setVisibility(View.VISIBLE);
+        releaseDateStringTV.setVisibility(View.VISIBLE);
+        loadingIndicator.setVisibility(View.GONE);
+
+        playButton.setVisibility(View.VISIBLE);
+        if (reviews.size() > 0 || review  != null) {
+            reviewLabel.setVisibility(View.VISIBLE);
+        }
+
+//                if(userReview.getLineCount() > userReview.getMaxLines()){
+//                    readMoreButton.setVisibility(View.VISIBLE);
+//                }
+
+        userReview.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -225,7 +251,7 @@ public class DetailActivity extends MasterActivity {
 
     }
 
-    private boolean isInFavorites(){
+    private boolean isInFavorites() {
         Cursor cursor = getContentResolver().query(FavoritesEntry.CONTENT_URI,
                 new String[]{FavoritesEntry.COLUMN_MOVIE_ID},
                 FavoritesEntry.COLUMN_MOVIE_ID + "= ?",
@@ -234,7 +260,7 @@ public class DetailActivity extends MasterActivity {
                 null
         );
 
-        if(cursor.getCount() > 0){
+        if (cursor.getCount() > 0) {
             cursor.close();
             return true;
         }
@@ -250,7 +276,7 @@ public class DetailActivity extends MasterActivity {
             upIcon.mutate();
             upIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.textColor),
                     PorterDuff
-                    .Mode.SRC_ATOP);
+                            .Mode.SRC_ATOP);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -298,11 +324,11 @@ public class DetailActivity extends MasterActivity {
             if (data != null) {
                 final String youtubeKey = data.getString("youtube_key");
                 reviews = data.getParcelableArrayList("reviews");
-                if(reviews.size() > 0) {
+                if (reviews.size() > 0) {
                     review = reviews.get(0).getContent() + " -" + reviews.get(0).getAuthor();
                 }
 
-                 youtubeLink = "https://www.youtube.com/watch?v=" + youtubeKey;
+                youtubeLink = "https://www.youtube.com/watch?v=" + youtubeKey;
 
 
                 if (review != null) {
@@ -341,8 +367,7 @@ public class DetailActivity extends MasterActivity {
                         return true;
                     }
                 });
-            }
-            else{
+            } else {
                 showErrorScreen(errorTV, loadingIndicator);
             }
         }

@@ -370,6 +370,7 @@ public class MovieActivity extends MasterActivity {
                             int releaseDateIndex = data.getColumnIndex(FavoritesEntry
                                     .COLUMN_RELEASE_DATE);
                             int plotIndex = data.getColumnIndex(FavoritesEntry.COLUMN_SYNPOSIS);
+                            int movieIdIndex = data.getColumnIndex(FavoritesEntry.COLUMN_MOVIE_ID);
 
 
                             String title = data.getString(titleIndex);
@@ -379,10 +380,23 @@ public class MovieActivity extends MasterActivity {
                             String youtubeLink = data.getString(youtubeIndex);
                             String releaseDate = data.getString(releaseDateIndex);
                             String plot = data.getString(plotIndex);
+                            int id = data.getInt(movieIdIndex);
 
                             Intent intent = new Intent(MovieActivity.this, DetailActivity.class);
 
-                           // intent.putExtra("");
+                            intent.putExtra(Constants.KEY_TITLE, title);
+                            intent.putExtra(Constants.KEY_RATING, rating);
+
+                            if(review != null )
+                            intent.putExtra(Constants.KEY_REVIEW, review);
+
+                            intent.putExtra(Constants.KEY_IMAGE_BYTES, image);
+                            intent.putExtra(Constants.KEY_YOUTUBE_LINK, youtubeLink);
+                            intent.putExtra(Constants.KEY_RELEASE_DATE, releaseDate);
+                            intent.putExtra(Constants.KEY_PLOT, plot);
+                            intent.putExtra(Constants.KEY_ID, id);
+
+                            startActivity(intent);
                         }
 
                     }
