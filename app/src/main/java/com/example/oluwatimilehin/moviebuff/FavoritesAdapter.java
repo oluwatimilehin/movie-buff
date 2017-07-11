@@ -49,12 +49,14 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
                 titleIndex = cursor.getColumnIndex(FavoritesEntry.COLUMN_TITLE);
                 yearIndex = cursor.getColumnIndex(FavoritesEntry.COLUMN_RELEASE_DATE);
 
+                String year = cursor.getString(yearIndex).substring(0,4);
+
                 byte[] imageByte = cursor.getBlob(imageIndex);
                 Bitmap imageBitmap = BitMapUtils.getImage(imageByte);
 
                 imageView.setImageBitmap(imageBitmap);
                 titleTv.setText(cursor.getString(titleIndex));
-                yearTv.setText(cursor.getString(yearIndex));
+                yearTv.setText(year);
             }
         };
     }
