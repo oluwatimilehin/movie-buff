@@ -51,7 +51,7 @@ public class DetailActivity extends MasterActivity {
     String releaseDate;
     String youtubeLink;
     int id;
-    ArrayList<Reviews> reviews;
+    ArrayList<Reviews> reviews = null;
     String review = null;
     Bitmap imageBitmap;
     Drawable drawable;
@@ -191,7 +191,7 @@ public class DetailActivity extends MasterActivity {
                 Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink));
 
                 try {
-                    if(youtubeLink != null) {
+                    if(youtubeKey != null) {
                         startActivity(appIntent);
                     }
                 } catch (ActivityNotFoundException e) {
@@ -256,7 +256,7 @@ public class DetailActivity extends MasterActivity {
         loadingIndicator.setVisibility(View.GONE);
 
         playButton.setVisibility(View.VISIBLE);
-        if (reviews != null || review != null) {
+        if (reviews.size() > 0  || review != null) {
             userReview.setText(review);
             reviewLabel.setVisibility(View.VISIBLE);
         }
