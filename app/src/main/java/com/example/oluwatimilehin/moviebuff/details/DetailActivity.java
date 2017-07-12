@@ -56,6 +56,7 @@ public class DetailActivity extends MasterActivity {
     Bitmap imageBitmap;
     Drawable drawable;
     Target bitmapTarget;
+    String youtubeKey;
     private Toolbar mToolbar;
     private TextView mToolbarText;
     private ImageView mImageView;
@@ -83,7 +84,7 @@ public class DetailActivity extends MasterActivity {
         setSupportActionBar(mToolbar);
         mToolbarText.setText(R.string.movie_detail);
         mToolbarText.setGravity(Gravity.NO_GRAVITY);
-        mToolbarText.setPadding(200, 0, 0, 0);
+        mToolbarText.setPadding(100, 0, 0, 0);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -115,8 +116,7 @@ public class DetailActivity extends MasterActivity {
 
         if (callingIntent.hasExtra(Constants.KEY_YOUTUBE_LINK)) {
             youtubeLink = callingIntent.getStringExtra(Constants.KEY_YOUTUBE_LINK);
-//            imageBitmap = BitMapUtils.getImage(callingIntent.getByteArrayExtra(Constants
-//                    .KEY_IMAGE_BYTES));
+           // imageBitmap = BitMapUti
 
             if (callingIntent.hasExtra(Constants.KEY_REVIEW)) {
                 review = callingIntent.getStringExtra(Constants.KEY_REVIEW);
@@ -182,6 +182,36 @@ public class DetailActivity extends MasterActivity {
 
         });
 
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Add youtube intent
+                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd" +
+                        ".youtube:" + youtubeKey));
+                Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink));
+
+                try {
+                    if(youtubeLink != null) {
+                        startActivity(appIntent);
+                    }
+                } catch (ActivityNotFoundException e) {
+                    startActivity(webIntent);
+                }
+            }
+        });
+
+        //Longclick listener to share youtube link
+        mImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, youtubeLink);
+                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Youtube link");
+                startActivity(Intent.createChooser(sharingIntent, "Share via"));
+                return true;
+            }
+        });
 
         bitmapTarget = new Target() {
             @Override
@@ -227,14 +257,16 @@ public class DetailActivity extends MasterActivity {
 
         playButton.setVisibility(View.VISIBLE);
         if (reviews != null || review != null) {
+            userReview.setText(review);
             reviewLabel.setVisibility(View.VISIBLE);
         }
+        userReview.setVisibility(View.VISIBLE);
 
         if (userReview.getLineCount() > userReview.getMaxLines()) {
             readMoreButton.setVisibility(View.VISIBLE);
         }
 
-        userReview.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -319,7 +351,7 @@ public class DetailActivity extends MasterActivity {
         public void onLoadFinished(Loader<Bundle> loader, Bundle data) {
 
             if (data != null) {
-                final String youtubeKey = data.getString("youtube_key");
+                youtubeKey = data.getString("youtube_key");
                 reviews = data.getParcelableArrayList("reviews");
                 if (reviews.size() > 0) {
                     review = reviews.get(0).getContent() + " -" + reviews.get(0).getAuthor();
@@ -336,34 +368,6 @@ public class DetailActivity extends MasterActivity {
                         .load(fullUrl)
                         .into(bitmapTarget);
 
-                mImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //Add youtube intent
-                        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd" +
-                                ".youtube:" + youtubeKey));
-                        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink));
-
-                        try {
-                            startActivity(appIntent);
-                        } catch (ActivityNotFoundException e) {
-                            startActivity(webIntent);
-                        }
-                    }
-                });
-
-                //Longclick listener to share youtube link
-                mImageView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                        sharingIntent.setType("text/plain");
-                        sharingIntent.putExtra(Intent.EXTRA_TEXT, youtubeLink);
-                        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Youtube link");
-                        startActivity(Intent.createChooser(sharingIntent, "Share via"));
-                        return true;
-                    }
-                });
             } else {
                 showErrorScreen(errorTV, loadingIndicator);
             }
