@@ -211,6 +211,7 @@ public class MovieActivity extends MasterActivity {
     protected void onResume() {
         super.onResume();
 
+        //Scroll to the previous position when activity is resumed
         if (rv.getLayoutManager() != null) {
             rv.smoothScrollToPosition((int) currentVisiblePosition);
         }
@@ -376,7 +377,7 @@ public class MovieActivity extends MasterActivity {
                             String title = data.getString(titleIndex);
                             String rating = data.getString(ratingIndex);
                             String review = data.getString(reviewIndex);
-                            byte[] image = data.getBlob(imageIndex);
+                            //byte[] image = data.getBlob(imageIndex);
                             String youtubeLink = data.getString(youtubeIndex);
                             String releaseDate = data.getString(releaseDateIndex);
                             String plot = data.getString(plotIndex);
@@ -390,7 +391,6 @@ public class MovieActivity extends MasterActivity {
                             if (review != null)
                                 intent.putExtra(Constants.KEY_REVIEW, review);
 
-                            //       intent.putExtra(Constants.KEY_IMAGE_BYTES, image);
                             intent.putExtra(Constants.KEY_YOUTUBE_LINK, youtubeLink);
                             intent.putExtra(Constants.KEY_RELEASE_DATE, releaseDate);
                             intent.putExtra(Constants.KEY_PLOT, plot);
