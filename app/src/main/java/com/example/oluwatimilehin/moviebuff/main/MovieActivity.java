@@ -41,9 +41,8 @@ import static android.view.View.GONE;
 
 public class MovieActivity extends MasterActivity {
 
-    static int MOVIE_LOADER_ID = 3;
     private static final int FAVORITES_LOADER_ID = 258;
-
+    static int MOVIE_LOADER_ID = 3;
     ProgressBar mProgressBar;
     ArrayList<Movies> movies = null;
     String query;
@@ -52,10 +51,10 @@ public class MovieActivity extends MasterActivity {
     long currentVisiblePosition = 0;
     AppBarLayout mAppBarLayout;
     LinearLayout layout;
+    MovieRVAdapter mMovieRVAdapter = null;
     private Toolbar toolbar;
     private TextView toolbarText;
     private Bundle bundle = new Bundle();
-    MovieRVAdapter mMovieRVAdapter = null;
     private TextView mErrorTv;
 
     @Override

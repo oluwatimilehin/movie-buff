@@ -74,6 +74,7 @@ public class DetailActivity extends MasterActivity {
     private TextView userReview;
     private Button readMoreButton;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,10 +104,42 @@ public class DetailActivity extends MasterActivity {
         reviewLabel = (TextView) findViewById(R.id.user_reviews_label);
         readMoreButton = (Button) findViewById(R.id.read_more_btn);
 
-        Intent callingIntent = getIntent();
 
         mImageView.setColorFilter(getResources().getColor(R.color.cardview_dark_background),
                 PorterDuff.Mode.MULTIPLY);
+
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Add youtube intent
+                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd" +
+                        ".youtube:" + youtubeKey));
+                Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink));
+
+                try {
+                    if (youtubeKey != null) {
+                        startActivity(appIntent);
+                    }
+                } catch (ActivityNotFoundException e) {
+                    startActivity(webIntent);
+                }
+            }
+        });
+
+        //Longclick listener to share youtube link
+        mImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, youtubeLink);
+                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Youtube link");
+                startActivity(Intent.createChooser(sharingIntent, "Share via"));
+                return true;
+            }
+        });
+
+        Intent callingIntent = getIntent();
 
         title = callingIntent.getStringExtra(Constants.KEY_TITLE).toUpperCase();
         userRating = callingIntent.getStringExtra(Constants.KEY_RATING);
@@ -116,7 +149,7 @@ public class DetailActivity extends MasterActivity {
 
         if (callingIntent.hasExtra(Constants.KEY_YOUTUBE_LINK)) {
             youtubeLink = callingIntent.getStringExtra(Constants.KEY_YOUTUBE_LINK);
-           // imageBitmap = BitMapUti
+            // imageBitmap = BitMapUti
 
             if (callingIntent.hasExtra(Constants.KEY_REVIEW)) {
                 review = callingIntent.getStringExtra(Constants.KEY_REVIEW);
@@ -182,37 +215,6 @@ public class DetailActivity extends MasterActivity {
 
         });
 
-        mImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Add youtube intent
-                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd" +
-                        ".youtube:" + youtubeKey));
-                Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink));
-
-                try {
-                    if(youtubeKey != null) {
-                        startActivity(appIntent);
-                    }
-                } catch (ActivityNotFoundException e) {
-                    startActivity(webIntent);
-                }
-            }
-        });
-
-        //Longclick listener to share youtube link
-        mImageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(Intent.EXTRA_TEXT, youtubeLink);
-                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Youtube link");
-                startActivity(Intent.createChooser(sharingIntent, "Share via"));
-                return true;
-            }
-        });
-
         bitmapTarget = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -256,7 +258,7 @@ public class DetailActivity extends MasterActivity {
         loadingIndicator.setVisibility(View.GONE);
         playButton.setVisibility(View.VISIBLE);
 
-        if ( review != null) {
+        if (review != null) {
             userReview.setText(review);
             reviewLabel.setVisibility(View.VISIBLE);
             if (userReview.getLineCount() > userReview.getMaxLines()) {
