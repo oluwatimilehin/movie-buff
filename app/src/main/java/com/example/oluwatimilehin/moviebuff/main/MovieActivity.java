@@ -102,10 +102,9 @@ public class MovieActivity extends MasterActivity {
     protected void onPause() {
         super.onPause();
         if (rv.getLayoutManager() != null) {
-
             if (rv.getLayoutManager() instanceof GridLayoutManager) {
                 currentVisiblePosition = ((GridLayoutManager) rv.getLayoutManager())
-                        .findFirstCompletelyVisibleItemPosition();
+                        .findFirstVisibleItemPosition();
             }
         }
     }
@@ -212,8 +211,9 @@ public class MovieActivity extends MasterActivity {
         super.onResume();
 
         //Scroll to the previous position when activity is resumed
-        if (rv.getLayoutManager() != null) {
-            rv.smoothScrollToPosition((int) currentVisiblePosition);
+        if (rv.getLayoutManager() != null && !(toolbarText.getText().equals(getString(R.string.favorites))
+        )) {
+            rv.scrollToPosition((int) currentVisiblePosition);
         }
     }
 
