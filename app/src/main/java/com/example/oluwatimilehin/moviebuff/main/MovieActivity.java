@@ -41,20 +41,21 @@ import static android.view.View.GONE;
 
 public class MovieActivity extends MasterActivity {
 
-    final static int MOVIE_LOADER_ID = 3;
+    static int MOVIE_LOADER_ID = 3;
     private static final int FAVORITES_LOADER_ID = 258;
 
     ProgressBar mProgressBar;
     ArrayList<Movies> movies = null;
     String query;
     FavoritesAdapter favoritesAdapter;
-    RecyclerView rv;
+    RecyclerView moviesRv;
     long currentVisiblePosition = 0;
     AppBarLayout mAppBarLayout;
     LinearLayout layout;
     private Toolbar toolbar;
     private TextView toolbarText;
     private Bundle bundle = new Bundle();
+    MovieRVAdapter mMovieRVAdapter = null;
     private TextView mErrorTv;
 
     @Override
@@ -82,8 +83,9 @@ public class MovieActivity extends MasterActivity {
 
         layout = (LinearLayout) findViewById(R.id.main_layout);
 
-        rv = (RecyclerView) findViewById(R.id.rv_movies);
-        rv.setNestedScrollingEnabled(false);
+        moviesRv = (RecyclerView) findViewById(R.id.rv_movies);
+        moviesRv.setNestedScrollingEnabled(false);
+
 
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appBar);
 
@@ -101,12 +103,13 @@ public class MovieActivity extends MasterActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (rv.getLayoutManager() != null) {
-            if (rv.getLayoutManager() instanceof GridLayoutManager) {
-                currentVisiblePosition = ((GridLayoutManager) rv.getLayoutManager())
+        if (moviesRv.getLayoutManager() != null) {
+            if (moviesRv.getLayoutManager() instanceof GridLayoutManager) {
+                currentVisiblePosition = ((GridLayoutManager) moviesRv.getLayoutManager())
                         .findFirstVisibleItemPosition();
             }
         }
+
     }
 
     /**
@@ -122,7 +125,7 @@ public class MovieActivity extends MasterActivity {
 
     private void restartLoader(String s) {
         Random random = new Random();
-        int uniqueId = anyRandomInt(random); //Generates a new ID for each loader call;
+        MOVIE_LOADER_ID = anyRandomInt(random); //Generates a new ID for each loader call;
 
         bundle.putString("query", s);
 
@@ -130,7 +133,7 @@ public class MovieActivity extends MasterActivity {
             getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, bundle, new
                     MovieDataLoader());
         } else {
-            getSupportLoaderManager().initLoader(uniqueId, bundle, new MovieDataLoader());
+            getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, bundle, new MovieDataLoader());
         }
     }
 
@@ -211,9 +214,10 @@ public class MovieActivity extends MasterActivity {
         super.onResume();
 
         //Scroll to the previous position when activity is resumed
-        if (rv.getLayoutManager() != null) {
-            rv.scrollToPosition((int) currentVisiblePosition);
+        if (moviesRv.getLayoutManager() != null) {
+            moviesRv.scrollToPosition((int) currentVisiblePosition);
         }
+
     }
 
     private void startFavoritesLoader() {
@@ -240,8 +244,6 @@ public class MovieActivity extends MasterActivity {
 
     public class MovieDataLoader implements LoaderManager.LoaderCallbacks<ArrayList<Movies>> {
 
-        MovieRVAdapter adapter = null;
-
 
         @Override
         public Loader<ArrayList<Movies>> onCreateLoader(int id, final Bundle args) {
@@ -251,13 +253,13 @@ public class MovieActivity extends MasterActivity {
             if (isConnected) {
                 mErrorTv.setVisibility(View.INVISIBLE);
                 mProgressBar.setVisibility(View.VISIBLE);
-                rv.setVisibility(View.VISIBLE);
+                moviesRv.setVisibility(View.VISIBLE);
 
                 return new MovieLoader(MovieActivity.this, apiKey, args);
             }
 
             showErrorScreen(mErrorTv, mProgressBar);
-            rv.setVisibility(View.INVISIBLE);
+            moviesRv.setVisibility(View.INVISIBLE);
             return null;
         }
 
@@ -269,22 +271,22 @@ public class MovieActivity extends MasterActivity {
                 if (movies != null) {
                     movies.clear();
                     movies.addAll(data);
-                    if (adapter != null) {
-                        adapter.notifyDataSetChanged();
+                    if (mMovieRVAdapter != null) {
+                        mMovieRVAdapter.notifyDataSetChanged();
                     }
                 } else {
                     movies = data;
                 }
-                adapter = new MovieRVAdapter(movies);
+                mMovieRVAdapter = new MovieRVAdapter(movies);
 
-                rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
-                rv.setAdapter(adapter);
+                moviesRv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
+                moviesRv.setAdapter(mMovieRVAdapter);
             } else {
                 showErrorScreen(mErrorTv, mProgressBar);
-                rv.setVisibility(View.INVISIBLE);
+                moviesRv.setVisibility(View.INVISIBLE);
             }
-            if (adapter != null) {
-                adapter.setOnItemClickListener(new MovieRVAdapter.ClickListener() {
+            if (mMovieRVAdapter != null) {
+                mMovieRVAdapter.setOnItemClickListener(new MovieRVAdapter.ClickListener() {
                     @Override
                     public void onItemClick(int position, View v) {
                         Movies currentMovie = movies.get(position);
@@ -314,7 +316,7 @@ public class MovieActivity extends MasterActivity {
 
         @Override
         public void onLoaderReset(Loader<ArrayList<Movies>> loader) {
-            //super(loader);
+
         }
 
     }
@@ -330,8 +332,9 @@ public class MovieActivity extends MasterActivity {
 
             if (mErrorTv.getVisibility() == View.VISIBLE) {
                 mErrorTv.setVisibility(View.INVISIBLE);
-                rv.setVisibility(View.VISIBLE);
+                moviesRv.setVisibility(View.GONE);
             }
+
 
             mProgressBar.setVisibility(View.VISIBLE);
             return new CursorLoader(MovieActivity.this,
@@ -350,9 +353,10 @@ public class MovieActivity extends MasterActivity {
             if (data.getCount() > 0) {
                 mErrorTv.setVisibility(GONE);
                 favoritesAdapter = new FavoritesAdapter(MovieActivity.this, data);
-                rv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
-                rv.setAdapter(favoritesAdapter);
 
+                moviesRv.setLayoutManager(new GridLayoutManager(loader.getContext(), 2));
+
+                moviesRv.setAdapter(favoritesAdapter);
 
                 favoritesAdapter.setOnItemClickListener(new FavoritesAdapter.ClickListener() {
                     @Override
@@ -404,7 +408,7 @@ public class MovieActivity extends MasterActivity {
                 return;
             }
 
-            rv.setVisibility(GONE);
+            moviesRv.setVisibility(GONE);
             mErrorTv.setText(getString(R.string.favorites_error));
             mErrorTv.setVisibility(View.VISIBLE);
 
