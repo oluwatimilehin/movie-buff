@@ -51,7 +51,7 @@ public class DetailActivity extends MasterActivity {
     String releaseDate;
     String youtubeLink;
     int id;
-    ArrayList<Reviews> reviews = null;
+    ArrayList<Reviews> reviews;
     String review = null;
     Bitmap imageBitmap;
     Drawable drawable;
@@ -254,18 +254,16 @@ public class DetailActivity extends MasterActivity {
         userRatingStringTV.setVisibility(View.VISIBLE);
         releaseDateStringTV.setVisibility(View.VISIBLE);
         loadingIndicator.setVisibility(View.GONE);
-
         playButton.setVisibility(View.VISIBLE);
-        if (reviews.size() > 0  || review != null) {
+
+        if ( review != null) {
             userReview.setText(review);
             reviewLabel.setVisibility(View.VISIBLE);
+            if (userReview.getLineCount() > userReview.getMaxLines()) {
+                readMoreButton.setVisibility(View.VISIBLE);
+            }
         }
         userReview.setVisibility(View.VISIBLE);
-
-        if (userReview.getLineCount() > userReview.getMaxLines()) {
-            readMoreButton.setVisibility(View.VISIBLE);
-        }
-
 
     }
 
