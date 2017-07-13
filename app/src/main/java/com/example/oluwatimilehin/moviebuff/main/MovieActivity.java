@@ -211,8 +211,7 @@ public class MovieActivity extends MasterActivity {
         super.onResume();
 
         //Scroll to the previous position when activity is resumed
-        if (rv.getLayoutManager() != null && !(toolbarText.getText().equals(getString(R.string.favorites))
-        )) {
+        if (rv.getLayoutManager() != null) {
             rv.scrollToPosition((int) currentVisiblePosition);
         }
     }
