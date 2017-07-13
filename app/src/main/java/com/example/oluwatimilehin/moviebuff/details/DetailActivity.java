@@ -261,11 +261,20 @@ public class DetailActivity extends MasterActivity {
         if (review != null) {
             userReview.setText(review);
             reviewLabel.setVisibility(View.VISIBLE);
-            if (userReview.getLineCount() > userReview.getMaxLines()) {
-                readMoreButton.setVisibility(View.VISIBLE);
-            }
+            userReview.setVisibility(View.VISIBLE);
+
+            userReview.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (userReview.getLineCount() > userReview.getMaxLines()) {
+
+                        readMoreButton.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
         }
-        userReview.setVisibility(View.VISIBLE);
+
 
     }
 
