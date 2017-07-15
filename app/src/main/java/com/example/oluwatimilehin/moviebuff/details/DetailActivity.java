@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.example.oluwatimilehin.moviebuff.Constants.KEY_IMAGE_BYTES;
+import static com.example.oluwatimilehin.moviebuff.Constants.KEY_YOUTUBE_LINK;
 
 public class DetailActivity extends MasterActivity {
 
@@ -236,7 +237,7 @@ public class DetailActivity extends MasterActivity {
         };
 
         //Start the loader only if the movie is not in the database
-        if (!callingIntent.hasExtra(KEY_IMAGE_BYTES)) {
+        if (!callingIntent.hasExtra(KEY_YOUTUBE_LINK)) {
 
             Bundle bundle = new Bundle();
             bundle.putInt("id", id);
