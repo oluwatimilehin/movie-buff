@@ -106,6 +106,28 @@ public class DetailActivity extends MasterActivity {
         mImageView.setColorFilter(getResources().getColor(R.color.cardview_dark_background),
                 PorterDuff.Mode.MULTIPLY);
 
+
+        Intent callingIntent = getIntent();
+
+        title = callingIntent.getStringExtra(Constants.KEY_TITLE).toUpperCase();
+        userRating = callingIntent.getStringExtra(Constants.KEY_RATING);
+        plot = callingIntent.getStringExtra(Constants.KEY_PLOT);
+        releaseDate = callingIntent.getStringExtra(Constants.KEY_RELEASE_DATE);
+        id = callingIntent.getIntExtra("id", 1);
+
+        if (callingIntent.hasExtra(Constants.KEY_YOUTUBE_LINK)) {
+            youtubeLink = callingIntent.getStringExtra(Constants.KEY_YOUTUBE_LINK);
+            imageBitmap = loadImage();
+            if (callingIntent.hasExtra(Constants.KEY_REVIEW)) {
+                review = callingIntent.getStringExtra(Constants.KEY_REVIEW);
+            }
+
+            loadViews();
+        } else {
+            imagePath = callingIntent.getStringExtra(Constants.KEY_IMAGE_URL);
+            fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
+        }
+
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,11 +136,15 @@ public class DetailActivity extends MasterActivity {
                         ".youtube:" + youtubeKey));
                 Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink));
 
-                try {
-                    if (youtubeKey != null) {
+                if(youtubeKey != null) {
+                    try {
                         startActivity(appIntent);
+
+                    } catch (ActivityNotFoundException e) {
+                        startActivity(webIntent);
                     }
-                } catch (ActivityNotFoundException e) {
+                }
+                else{
                     startActivity(webIntent);
                 }
             }
@@ -136,28 +162,6 @@ public class DetailActivity extends MasterActivity {
                 return true;
             }
         });
-
-        Intent callingIntent = getIntent();
-
-        title = callingIntent.getStringExtra(Constants.KEY_TITLE).toUpperCase();
-        userRating = callingIntent.getStringExtra(Constants.KEY_RATING);
-        plot = callingIntent.getStringExtra(Constants.KEY_PLOT);
-        releaseDate = callingIntent.getStringExtra(Constants.KEY_RELEASE_DATE);
-        id = callingIntent.getIntExtra("id", 1);
-
-        if (callingIntent.hasExtra(Constants.KEY_YOUTUBE_LINK)) {
-            youtubeLink = callingIntent.getStringExtra(Constants.KEY_YOUTUBE_LINK);
-            // imageBitmap = BitMapUti
-
-            if (callingIntent.hasExtra(Constants.KEY_REVIEW)) {
-                review = callingIntent.getStringExtra(Constants.KEY_REVIEW);
-            }
-
-            loadViews();
-        } else {
-            imagePath = callingIntent.getStringExtra(Constants.KEY_IMAGE_URL);
-            fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
-        }
 
         drawable = starImage.getDrawable().mutate();
 
@@ -216,7 +220,7 @@ public class DetailActivity extends MasterActivity {
         bitmapTarget = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                mImageView.setImageBitmap(bitmap);
+               // mImageView.setImageBitmap(bitmap);
                 imageBitmap = bitmap;
                 loadViews();
             }
@@ -270,6 +274,7 @@ public class DetailActivity extends MasterActivity {
         releaseDateTV.setText(releaseDate);
         plotTV.setText(plot);
         starImage.setVisibility(View.VISIBLE);
+        mImageView.setImageBitmap(imageBitmap);
         userRatingStringTV.setVisibility(View.VISIBLE);
         releaseDateStringTV.setVisibility(View.VISIBLE);
         loadingIndicator.setVisibility(View.GONE);
@@ -321,6 +326,30 @@ public class DetailActivity extends MasterActivity {
             return true;
         }
         return false;
+    }
+
+    private Bitmap loadImage(){
+        Cursor cursor = getContentResolver().query(FavoritesEntry.CONTENT_URI,
+                new String[]{FavoritesEntry.COLUMN_IMAGE},
+                FavoritesEntry.COLUMN_MOVIE_ID + "= ?",
+                new String[]{String.valueOf(id)},
+                null,
+                null);
+        Bitmap imageBitmap = null;
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int imageIndex = cursor.getColumnIndex(FavoritesEntry.COLUMN_IMAGE);
+
+                byte[] image = cursor.getBlob(imageIndex);
+
+               imageBitmap  = BitMapUtils.getImage(image);
+
+                cursor.close();
+            }
+        }
+
+        return imageBitmap;
     }
 
     @Override
