@@ -125,7 +125,6 @@ public class MovieActivity extends MasterActivity {
     private void restartLoader(String s) {
         Random random = new Random();
         MOVIE_LOADER_ID = anyRandomInt(random); //Generates a new ID for each loader call;
-
         bundle.putString("query", s);
 
         if (getSupportLoaderManager().getLoader(MOVIE_LOADER_ID) != null) {
@@ -348,6 +347,7 @@ public class MovieActivity extends MasterActivity {
         @Override
         public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
             mProgressBar.setVisibility(GONE);
+            moviesRv.setVisibility(View.VISIBLE);
 
             if (data.getCount() > 0) {
                 mErrorTv.setVisibility(GONE);
