@@ -158,6 +158,12 @@ public class MovieActivity extends MasterActivity {
                             .SRC_ATOP);
         }
 
+        //Hides the option to refresh when on favorites screen
+        if(toolbarText.getText().equals(getString(R.string.favorites))){
+            menu.findItem(R.id.action_refresh).setVisible(false);
+            menu.findItem(R.id.favorites).setChecked(true);
+        }
+
         return true;
     }
 
@@ -188,6 +194,7 @@ public class MovieActivity extends MasterActivity {
                 if (toolbarText.getText().equals(getString(R.string.favorites))) {
                     return true;
                 }
+                invalidateOptionsMenu();
                 item.setChecked(true);
                 toolbarText.setText(R.string.favorites);
                 getSupportLoaderManager().destroyLoader(MOVIE_LOADER_ID);
