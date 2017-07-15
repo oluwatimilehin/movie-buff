@@ -216,6 +216,8 @@ public class MovieActivity extends MasterActivity {
             moviesRv.scrollToPosition((int) currentVisiblePosition);
         }
 
+        moviesRv.invalidate();
+
     }
 
     private void startFavoritesLoader() {
@@ -367,7 +369,6 @@ public class MovieActivity extends MasterActivity {
                                     .COLUMN_TITLE);
                             int ratingIndex = data.getColumnIndex(FavoritesEntry.COLUMN_RATING);
                             int reviewIndex = data.getColumnIndex(FavoritesEntry.COLUMN_REVIEW);
-                            int imageIndex = data.getColumnIndex(FavoritesEntry.COLUMN_IMAGE);
                             int youtubeIndex = data.getColumnIndex(FavoritesEntry
                                     .COLUMN_YOUTUBE_LINK);
                             int releaseDateIndex = data.getColumnIndex(FavoritesEntry
@@ -379,7 +380,6 @@ public class MovieActivity extends MasterActivity {
                             String title = data.getString(titleIndex);
                             String rating = data.getString(ratingIndex);
                             String review = data.getString(reviewIndex);
-                            //byte[] image = data.getBlob(imageIndex);
                             String youtubeLink = data.getString(youtubeIndex);
                             String releaseDate = data.getString(releaseDateIndex);
                             String plot = data.getString(plotIndex);
