@@ -1,8 +1,8 @@
 package com.example.oluwatimilehin.moviebuff.details;
 
+import android.animation.ObjectAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -36,9 +36,6 @@ import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
-import static com.example.oluwatimilehin.moviebuff.Constants.KEY_IMAGE_BYTES;
 import static com.example.oluwatimilehin.moviebuff.Constants.KEY_YOUTUBE_LINK;
 
 public class DetailActivity extends MasterActivity {
@@ -235,6 +232,25 @@ public class DetailActivity extends MasterActivity {
 
             }
         };
+
+
+        readMoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int collapsedMaxLines = 4;
+                ObjectAnimator animation = ObjectAnimator.ofInt(userReview, "maxLines",
+                        userReview.getMaxLines() == collapsedMaxLines ? userReview.getLineCount() : collapsedMaxLines);
+                animation.setDuration(200).start();
+
+                if (readMoreButton.getText().equals(getString(R.string.read_more))) {
+                    readMoreButton.setText
+                            (getString(R.string.show_less));
+                } else {
+                    readMoreButton.setText(getString(R.string
+                            .read_more));
+                }
+            }
+        });
 
         //Start the loader only if the movie is not in the database
         if (!callingIntent.hasExtra(KEY_YOUTUBE_LINK)) {

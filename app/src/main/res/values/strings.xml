@@ -16,4 +16,5 @@
     <string name="favorites">My Favorites</string>
     <string name="favorites_error">You do not currently have any movies saved</string>
     <string name="read_more">Read More</string>
+    <string name="show_less">Show less</string>
 </resources>
