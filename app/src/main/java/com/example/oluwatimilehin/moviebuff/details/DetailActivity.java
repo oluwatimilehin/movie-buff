@@ -257,6 +257,7 @@ public class DetailActivity extends MasterActivity {
         releaseDateStringTV.setVisibility(View.VISIBLE);
         loadingIndicator.setVisibility(View.GONE);
         playButton.setVisibility(View.VISIBLE);
+        errorTV.setVisibility(View.GONE);
 
         if (review != null) {
             userReview.setText(review);
