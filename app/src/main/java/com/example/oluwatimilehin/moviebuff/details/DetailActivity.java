@@ -102,19 +102,20 @@ public class DetailActivity extends MasterActivity {
         reviewLabel = (TextView) findViewById(R.id.user_reviews_label);
         readMoreButton = (Button) findViewById(R.id.read_more_btn);
 
-
+        //Tints the movie thumbnail
         mImageView.setColorFilter(getResources().getColor(R.color.cardview_dark_background),
                 PorterDuff.Mode.MULTIPLY);
 
-
         Intent callingIntent = getIntent();
 
+        //Get the data passed from main activity
         title = callingIntent.getStringExtra(Constants.KEY_TITLE).toUpperCase();
         userRating = callingIntent.getStringExtra(Constants.KEY_RATING);
         plot = callingIntent.getStringExtra(Constants.KEY_PLOT);
         releaseDate = callingIntent.getStringExtra(Constants.KEY_RELEASE_DATE);
         id = callingIntent.getIntExtra("id", 1);
 
+        //This condition checks if the move has been loaded from the database or not
         if (callingIntent.hasExtra(Constants.KEY_YOUTUBE_LINK)) {
             youtubeLink = callingIntent.getStringExtra(Constants.KEY_YOUTUBE_LINK);
             imageBitmap = loadImage();
@@ -128,6 +129,7 @@ public class DetailActivity extends MasterActivity {
             fullUrl = "http://image.tmdb.org/t/p/w780/" + imagePath;
         }
 
+        //On click listener to open youtube link
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,15 +138,14 @@ public class DetailActivity extends MasterActivity {
                         ".youtube:" + youtubeKey));
                 Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink));
 
-                if(youtubeKey != null) {
+                if (youtubeKey != null) {
                     try {
                         startActivity(appIntent);
 
                     } catch (ActivityNotFoundException e) {
                         startActivity(webIntent);
                     }
-                }
-                else{
+                } else {
                     startActivity(webIntent);
                 }
             }
@@ -165,6 +166,7 @@ public class DetailActivity extends MasterActivity {
 
         drawable = starImage.getDrawable().mutate();
 
+        //If the movie is in the favorites table, color the star
         if (isInFavorites()) {
             drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(), R
                     .color.orange_star), PorterDuff.Mode
@@ -183,6 +185,7 @@ public class DetailActivity extends MasterActivity {
 
                     rowsDeleted = getContentResolver().delete(FavoritesEntry.CONTENT_URI,
                             selectionClause, selectionArgs);
+
                     if (rowsDeleted > 0) {
                         drawable.clearColorFilter();
                     }
@@ -190,6 +193,10 @@ public class DetailActivity extends MasterActivity {
                 } else { //Insert into favorites table
 
                     Uri mUri;
+
+                    drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(), R
+                            .color.orange_star), PorterDuff.Mode
+                            .SRC_ATOP);
 
                     ContentValues newValues = new ContentValues();
                     newValues.put(FavoritesEntry.COLUMN_MOVIE_ID, id);
@@ -207,20 +214,15 @@ public class DetailActivity extends MasterActivity {
 
                     mUri = getContentResolver().insert(FavoritesEntry.CONTENT_URI, newValues);
 
-                    if (mUri != null) {
-                        drawable.setColorFilter(ContextCompat.getColor(getApplicationContext(), R
-                                .color.orange_star), PorterDuff.Mode
-                                .SRC_ATOP);
-                    }
                 }
             }
 
         });
 
+        //Defines the target for the Picasso handler
         bitmapTarget = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-               // mImageView.setImageBitmap(bitmap);
                 imageBitmap = bitmap;
                 loadViews();
             }
@@ -237,7 +239,7 @@ public class DetailActivity extends MasterActivity {
             }
         };
 
-
+        //This implements the read more functionality
         readMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,9 +258,8 @@ public class DetailActivity extends MasterActivity {
             }
         });
 
-        //Start the loader only if the movie is not in the database
+        //Start the loader only if the movie is not loaded from the database
         if (!callingIntent.hasExtra(KEY_YOUTUBE_LINK)) {
-
             Bundle bundle = new Bundle();
             bundle.putInt("id", id);
             getSupportLoaderManager().initLoader(DETAILS_LOADER_ID, bundle, new DetailsDataLoader());
@@ -286,11 +287,11 @@ public class DetailActivity extends MasterActivity {
             reviewLabel.setVisibility(View.VISIBLE);
             userReview.setVisibility(View.VISIBLE);
 
+            //Handler to getLineCount on the UI thread
             userReview.post(new Runnable() {
                 @Override
                 public void run() {
                     if (userReview.getLineCount() > userReview.getMaxLines()) {
-
                         readMoreButton.setVisibility(View.VISIBLE);
                     }
                 }
@@ -301,16 +302,6 @@ public class DetailActivity extends MasterActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-//                .setDefaultFontPath("fonts/Raleway-Light.ttf")
-//                .setFontAttrId(R.attr.fontPath)
-//                .build()
-//        );
-
-    }
 
     private boolean isInFavorites() {
         Cursor cursor = getContentResolver().query(FavoritesEntry.CONTENT_URI,
@@ -328,7 +319,8 @@ public class DetailActivity extends MasterActivity {
         return false;
     }
 
-    private Bitmap loadImage(){
+    private Bitmap loadImage() {
+        //Get the movie image from the database
         Cursor cursor = getContentResolver().query(FavoritesEntry.CONTENT_URI,
                 new String[]{FavoritesEntry.COLUMN_IMAGE},
                 FavoritesEntry.COLUMN_MOVIE_ID + "= ?",
@@ -340,10 +332,8 @@ public class DetailActivity extends MasterActivity {
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 int imageIndex = cursor.getColumnIndex(FavoritesEntry.COLUMN_IMAGE);
-
                 byte[] image = cursor.getBlob(imageIndex);
-
-               imageBitmap  = BitMapUtils.getImage(image);
+                imageBitmap = BitMapUtils.getImage(image);
 
                 cursor.close();
             }
@@ -378,15 +368,6 @@ public class DetailActivity extends MasterActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Method used to install the Calligraphy library
-     *
-     * @param newBase
-     */
-//    @Override
-//    protected void attachBaseContext(Context newBase) {
-//        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-//    }
 
     public class DetailsDataLoader implements LoaderManager.LoaderCallbacks<Bundle> {
 
@@ -411,9 +392,7 @@ public class DetailActivity extends MasterActivity {
                 if (reviews.size() > 0) {
                     review = reviews.get(0).getContent() + " -" + reviews.get(0).getAuthor();
                 }
-
                 youtubeLink = "https://www.youtube.com/watch?v=" + youtubeKey;
-
 
                 if (review != null) {
                     userReview.setText(review);
