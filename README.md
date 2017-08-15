@@ -1,6 +1,8 @@
 # Movie Buff
 Movie Buff displays the top rated and most popular movies today and lets users store their favorite movies in a SQLite Database using ContentProviders. 
 
+If you would like to try it out, you can download the apk from [this link.](https://drive.google.com/open?id=0B2XA6b4G9Lf-TzAwempHM0Z3VDQ) 
+
 It fetches data from TheMovieDatabase API. You would have to generate your own API key and use it in the MovieActivity.java file. 
 Users have the option to sort movies by 'Popular','Top rated' and 'Favorites' . Selecting a movie loads up a new activity that displays details of that movie. 
 
