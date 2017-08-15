@@ -223,7 +223,7 @@ public class MovieActivity extends MasterActivity {
             moviesRv.scrollToPosition((int) currentVisiblePosition);
         }
 
-        moviesRv.invalidate();
+
 
     }
 
