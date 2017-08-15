@@ -24,6 +24,10 @@ Top Rated Movies:
 
 ![Top rated](/screenshots/top-rated.png)
 
+Favorites:
+
+![Favorite Movies](/screenshots/favorites.png)
+
 Details Screen:
 
 ![Detail](/screenshots/detail.png)
